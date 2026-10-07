@@ -17,6 +17,13 @@
     <title>江城故人 · 李白篇</title>
   </head>
   <body>
+    <audio data-bg-music loop preload="auto" aria-label="游戏背景音乐">
+      <source src="./assets/game-bgm.mp3" type="audio/mpeg" />
+    </audio>
+    <button class="music-toggle" type="button" data-action="toggle-music" aria-pressed="true">
+      <span class="music-toggle-icon" data-music-icon aria-hidden="true">♫</span>
+      <span data-music-label>音乐开启</span>
+    </button>
     <main id="game" class="game-shell">
       <section class="screen screen--active intro-screen" data-screen="intro" aria-labelledby="intro-title">
         <div class="intro-wash" aria-hidden="true"></div>
@@ -52,10 +59,6 @@
             <img src="./assets/zhangzhidong-card.png" alt="" />
             <span class="card-caption"><span>张之洞 <small>汉阳工业 · 蒸汽火车</small></span><strong>筹备中</strong></span>
           </button>
-        </div>
-        <div class="character-detail" aria-live="polite">
-          <div><p class="eyebrow">人物档案</p><h3 data-character-title>选一位同行者</h3><p data-character-description>点击人物卡，查看他的主题与旅程状态。</p></div>
-          <button class="primary-button" type="button" data-action="choose-libai" hidden>与李白启程</button>
         </div>
       </section>
 
@@ -97,25 +100,25 @@
             <p class="eyebrow eyebrow--light">第二幕 · 水墨观景</p>
             <h2 id="explore-title">楼上有两处诗境</h2>
           </div>
-          <div class="ink-progress" aria-live="polite">
+          <button class="ink-progress" type="button" data-action="complete-active" aria-live="polite" aria-label="点击完成当前诗境旅程">
             <span>寻幽进度</span>
             <strong data-progress-count>0 / 2</strong>
             <div class="stamp-row" aria-hidden="true"><i></i><i></i></div>
-          </div>
+          </button>
         </header>
 
         <button class="hotspot hotspot--flute" type="button" data-anchor="jade_flute" aria-label="查看玉笛故事">
           <span class="hotspot-orbit"></span><span class="hotspot-core"><img src="./assets/jade-flute-icon.png" alt="" /></span><span class="hotspot-label">玉笛 · 听笛怀远</span>
         </button>
         <button class="hotspot hotspot--crane" type="button" data-anchor="golden_crane" aria-label="查看黄鹤传说">
-          <span class="hotspot-orbit"></span><span class="hotspot-core">鹤</span><span class="hotspot-label">黄鹤 · 昔人仙踪</span>
+          <span class="hotspot-orbit"></span><span class="hotspot-core hotspot-core--crane"><span class="crane-sprite" aria-hidden="true"></span></span><span class="hotspot-label">黄鹤 · 昔人仙踪</span>
         </button>
         <nav class="anchor-nav" aria-label="探索锚点快捷入口">
           <button type="button" data-anchor="jade_flute">玉笛</button>
           <button type="button" data-anchor="golden_crane">黄鹤</button>
         </nav>
 
-        <aside class="story-panel" aria-live="polite">
+        <aside class="story-panel" data-story-panel aria-live="polite">
           <div class="speaker-row">
             <span class="speaker-seal">白</span>
             <div><span>同行者</span><strong>李白 · AI 演绎</strong></div>
@@ -125,18 +128,34 @@
           <p class="story-dialogue" data-story-dialogue>楼上有玉笛与黄鹤两处诗境。任选一处点开，听完故事，再决定是否记下这一景。</p>
           <p class="story-note" data-story-note>幻想场景与史实资料分开呈现。</p>
           <details class="story-source" data-story-source hidden><summary>查看诗文与典故来源</summary><div data-story-source-content></div></details>
-          <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>记下这一景</button>
+          <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>完成旅程</button>
           <button class="primary-button story-next" type="button" data-action="start-poem" hidden>进入下一剧情 · 一起题诗</button>
         </aside>
         <dialog class="anchor-media-dialog" data-anchor-dialog data-flute-dialog aria-label="玉笛诗境动效">
           <button class="anchor-dialog-close" type="button" data-action="close-anchor-dialog" aria-label="关闭玉笛动效">×</button>
           <img src="./assets/jade-flute.gif" alt="玉笛置于案上，梅花飘落的动画" />
           <p>玉笛 · 听笛怀远</p>
+          <aside class="journey-card" aria-label="玉笛旅程卡片">
+            <div class="speaker-row"><span class="speaker-seal">白</span><div><span>同行者</span><strong>李白 · AI 演绎</strong></div></div>
+            <p class="story-kicker" data-journey-type></p>
+            <h3 data-journey-title></h3>
+            <p class="journey-dialogue" data-journey-dialogue></p>
+            <p class="journey-note" data-journey-note></p>
+            <button class="primary-button journey-ack" type="button" data-action="ack-anchor">完成旅程</button>
+          </aside>
         </dialog>
         <dialog class="anchor-media-dialog" data-anchor-dialog data-crane-dialog aria-label="黄鹤诗境动效">
           <button class="anchor-dialog-close" type="button" data-action="close-anchor-dialog" aria-label="关闭黄鹤动效">×</button>
           <img src="./assets/golden-crane-v2.gif" alt="从黄鹤楼内眺望长江与城市的动画" />
           <p>黄鹤 · 昔人仙踪</p>
+          <aside class="journey-card" aria-label="黄鹤旅程卡片">
+            <div class="speaker-row"><span class="speaker-seal">白</span><div><span>同行者</span><strong>李白 · AI 演绎</strong></div></div>
+            <p class="story-kicker" data-journey-type></p>
+            <h3 data-journey-title></h3>
+            <p class="journey-dialogue" data-journey-dialogue></p>
+            <p class="journey-note" data-journey-note></p>
+            <button class="primary-button journey-ack" type="button" data-action="ack-anchor">完成旅程</button>
+          </aside>
         </dialog>
       </section>
 
@@ -147,7 +166,7 @@
           <section class="poem-workspace">
             <p class="eyebrow">第三幕 · 触景共题</p>
             <h2 id="poem-title">借你眼中的景，题一首今日的新诗</h2>
-            <p class="poem-intro">留下 1 至 2 个意象，每个最多 6 个汉字。当前诗稿为规则生成的演示内容，可自行调整；不署作历史李白真迹。</p>
+            <p class="poem-intro">从下方选择 2 至 3 个意象，每个最多 6 个汉字。诗句由规则演示生成，不能直接修改；可仅修改诗题。</p>
 
             <div class="keyword-section">
               <h3>先收下几样景物</h3>
@@ -159,12 +178,7 @@
                 <button type="button" class="keyword-chip" data-keyword="笛声">笛声</button>
                 <button type="button" class="keyword-chip" data-keyword="远帆">远帆</button>
               </div>
-              <div class="custom-keyword">
-                <label for="custom-word">你的词</label>
-                <input id="custom-word" maxlength="6" placeholder="如：远方、月色" />
-                <button type="button" class="text-button" data-action="add-keyword">收进诗笺</button>
-              </div>
-              <p class="selection-hint" data-keyword-hint>还未选择意象</p>
+              <p class="selection-hint" data-keyword-hint>请选择 2 至 3 个意象</p>
             </div>
 
             <div class="poem-actions poem-actions--generate">
@@ -176,7 +190,7 @@
               <label for="poem-name">诗题</label>
               <input id="poem-name" class="title-input" maxlength="12" value="借一笔江风" />
               <label for="poem-lines">诗句</label>
-              <textarea id="poem-lines" rows="4" maxlength="100"></textarea>
+              <textarea id="poem-lines" rows="4" maxlength="100" readonly aria-readonly="true"></textarea>
               <p class="draft-error" data-draft-error role="alert" hidden></p>
               <div class="poem-actions">
                 <button class="text-button" type="button" data-action="rewrite-poem">再写一版</button>
@@ -186,10 +200,10 @@
           </section>
 
           <aside class="poet-companion">
-            <img src="./assets/libai-card-v3.png" alt="李白江城故人传角色卡" />
+            <img src="./assets/libai-poem-card.png" alt="李白星洲诗客角色卡" />
             <div class="poet-quote">
-              <span>李白 · AI 演绎</span>
-              <p data-poet-prompt>“好诗不必抢着写，先看看你心里有什么。”</p>
+              <span>链上记忆</span>
+              <p data-poet-prompt>江城今夜月如舟，把这份江城诗意留在心里！</p>
             </div>
           </aside>
         </div>
@@ -207,7 +221,7 @@
               <div class="memory-meta">
                 <span>今日意象 <strong data-memory-keywords>江风</strong></span>
                 <span>同行记忆 <strong>玉笛、黄鹤</strong></span>
-                <span class="memory-player-note" data-memory-note-row hidden>我的留言 <strong data-memory-note></strong></span>
+                <span class="memory-player-note" data-memory-note-row>我的留言 <strong data-memory-note>尚未填写</strong></span>
                 <span>共题说明 <strong>旅伴与李白 AI 演绎共同构思</strong></span>
               </div>
               <div class="receipt-strip">
@@ -222,7 +236,7 @@
             <div>
               <p class="eyebrow eyebrow--light">终章 · 带走此刻</p>
               <h3>诗成，记忆已整理</h3>
-              <p>卡片只记录你确认采用的意象与诗句。当前版本生成本地摘要与图片，不会假称已经上链。</p>
+              <p>这张记忆卡会保存你选中的意象、诗题、诗句和留言，点击下方按钮即可带走本次江城旅程。</p>
               <label class="memory-note-label" for="player-note">留一句给今日的江城（选填，最多 60 字）</label>
               <textarea id="player-note" maxlength="60" rows="2" placeholder="这一程，我最想记住……"></textarea>
             </div>
