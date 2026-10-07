@@ -37,7 +37,7 @@
         </header>
         <div class="character-grid" role="group" aria-label="选择同行人物">
           <button class="character-card character-card--selectable" type="button" data-character="libai" aria-pressed="false">
-            <img src="./assets/libai-card.png" alt="" />
+            <img src="./assets/libai-card-v2.png" alt="" />
             <span class="card-caption"><span>李白 <small>黄鹤楼 · 御笔</small></span><strong>可体验</strong></span>
           </button>
           <button class="character-card character-card--selectable" type="button" data-character="quyuan" aria-pressed="false">
@@ -128,10 +128,15 @@
           <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>记下这一景</button>
           <button class="primary-button story-next" type="button" data-action="start-poem" hidden>进入下一剧情 · 一起题诗</button>
         </aside>
-        <dialog class="flute-dialog" data-flute-dialog aria-label="玉笛诗境动效">
-          <button class="flute-dialog-close" type="button" data-action="close-flute" aria-label="关闭玉笛动效">×</button>
+        <dialog class="anchor-media-dialog" data-anchor-dialog data-flute-dialog aria-label="玉笛诗境动效">
+          <button class="anchor-dialog-close" type="button" data-action="close-anchor-dialog" aria-label="关闭玉笛动效">×</button>
           <img src="./assets/jade-flute.gif" alt="玉笛置于案上，梅花飘落的动画" />
           <p>玉笛 · 听笛怀远</p>
+        </dialog>
+        <dialog class="anchor-media-dialog" data-anchor-dialog data-crane-dialog aria-label="黄鹤诗境动效">
+          <button class="anchor-dialog-close" type="button" data-action="close-anchor-dialog" aria-label="关闭黄鹤动效">×</button>
+          <img src="./assets/golden-crane.gif" alt="从黄鹤楼内眺望长江与城市的动画" />
+          <p>黄鹤 · 昔人仙踪</p>
         </dialog>
       </section>
 
@@ -181,7 +186,7 @@
           </section>
 
           <aside class="poet-companion">
-            <img src="./assets/libai-card.png" alt="李白水墨立绘" />
+            <img src="./assets/libai-card-v2.png" alt="李白一笔入江城角色卡" />
             <div class="poet-quote">
               <span>李白 · AI 演绎</span>
               <p data-poet-prompt>“好诗不必抢着写，先看看你心里有什么。”</p>

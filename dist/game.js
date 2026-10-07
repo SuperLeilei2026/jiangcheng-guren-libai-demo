@@ -43,8 +43,11 @@ const state = {
 
 function showScreen(name) {
   if ((name === "poem" || name === "memory") && state.explored.size !== ANCHORS.length) return false;
-  const fluteDialog = document.querySelector("[data-flute-dialog]");
-  if (name !== "explore" && fluteDialog.open) fluteDialog.close();
+  if (name !== "explore") {
+    document.querySelectorAll("[data-anchor-dialog]").forEach((dialog) => {
+      if (dialog.open) dialog.close();
+    });
+  }
   state.screen = name;
   screens.forEach((screen, key) => {
     screen.hidden = key !== name;
@@ -132,9 +135,11 @@ function openStory(anchor) {
   ack.hidden = state.explored.has(anchor);
   ack.textContent = `记下${anchor === "jade_flute" ? "玉笛" : "黄鹤"}这一景`;
   updateExploreUI();
-  if (anchor === "jade_flute") {
-    const dialog = document.querySelector("[data-flute-dialog]");
-    if (!dialog.open) dialog.showModal();
+  const dialog = document.querySelector(anchor === "jade_flute" ? "[data-flute-dialog]" : "[data-crane-dialog]");
+  if (dialog && !dialog.open) {
+    const animation = dialog.querySelector("img");
+    animation.src = animation.src;
+    dialog.showModal();
   }
 }
 
@@ -409,7 +414,7 @@ document.addEventListener("click", async (event) => {
   if (action === "back-select") showScreen("select");
   if (action === "arrive-map") showScreen("map");
   if (action === "enter-tower") beginMapFlight();
-  if (action === "close-flute") document.querySelector("[data-flute-dialog]").close();
+  if (action === "close-anchor-dialog") event.target.closest("dialog")?.close();
   if (action === "ack-anchor") acknowledgeAnchor();
   if (action === "start-poem") showScreen("poem");
   if (action === "back-explore") showScreen("explore");
