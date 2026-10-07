@@ -23,8 +23,9 @@
         <div class="intro-copy">
           <p class="eyebrow">历史人物赛博地陪</p>
           <h1 id="intro-title">江城故人</h1>
-          <p class="intro-lead">选一位故人，用他的眼光认识武汉。</p>
-          <button class="primary-button" type="button" data-action="enter">进入江城</button>
+          <p class="intro-lead">与一位历史故人同游江城，留下你们的记忆。</p>
+          <button class="primary-button" type="button" data-action="enter">开始体验</button>
+          <p class="experience-note">人物为 AI 演绎，景观与载具含幻想创作。</p>
         </div>
       </section>
 
@@ -34,17 +35,27 @@
           <h2 id="select-title">谁与你同游江城？</h2>
           <p>李白路线已开放，其余三位故人将在后续篇章中抵达。</p>
         </header>
-        <div class="character-grid">
-          <article class="character-card character-card--active">
-            <img src="./assets/libai-card.png" alt="李白人物卡片" />
-            <div class="card-caption">
-              <div><span>诗仙 · 御笔</span><h3>李白</h3></div>
-              <button class="seal-button" type="button" data-action="choose-libai">与太白同行</button>
-            </div>
-          </article>
-          <article class="character-card character-card--locked"><span class="placeholder-mark">楚</span><h3>屈原</h3><p>江滩楚风 · 待开放</p></article>
-          <article class="character-card character-card--locked"><span class="placeholder-mark">知</span><h3>伯牙与钟子期</h3><p>古琴台月湖 · 待开放</p></article>
-          <article class="character-card character-card--locked"><span class="placeholder-mark">工</span><h3>张之洞</h3><p>汉阳工业 · 待开放</p></article>
+        <div class="character-grid" role="group" aria-label="选择同行人物">
+          <button class="character-card character-card--selectable" type="button" data-character="libai" aria-pressed="false">
+            <img src="./assets/libai-card.png" alt="" />
+            <span class="card-caption"><span>李白 <small>黄鹤楼 · 御笔</small></span><strong>可体验</strong></span>
+          </button>
+          <button class="character-card character-card--selectable" type="button" data-character="quyuan" aria-pressed="false">
+            <img src="./assets/quyuan-card.png" alt="" />
+            <span class="card-caption"><span>屈原 <small>江滩楚风 · 龙舟</small></span><strong>筹备中</strong></span>
+          </button>
+          <button class="character-card character-card--selectable" type="button" data-character="boya_ziqi" aria-pressed="false">
+            <img src="./assets/boya-ziqi-card.png" alt="" />
+            <span class="card-caption"><span>伯牙与钟子期 <small>古琴台 · 琴舟</small></span><strong>筹备中</strong></span>
+          </button>
+          <button class="character-card character-card--selectable character-card--missing-art" type="button" data-character="zhangzhidong" aria-pressed="false">
+            <span class="placeholder-mark">工</span>
+            <span class="card-caption"><span>张之洞 <small>汉阳工业 · 蒸汽火车</small></span><strong>筹备中</strong></span>
+          </button>
+        </div>
+        <div class="character-detail" aria-live="polite">
+          <div><p class="eyebrow">人物档案</p><h3 data-character-title>选一位同行者</h3><p data-character-description>点击人物卡，查看他的主题与旅程状态。</p></div>
+          <button class="primary-button" type="button" data-action="choose-libai" hidden>与李白启程</button>
         </div>
       </section>
 
@@ -55,9 +66,10 @@
         <div class="cinematic-copy">
           <p class="eyebrow eyebrow--light">第二章 · 乘风御笔</p>
           <h2 id="flight-title">一笔横江，飞渡江城</h2>
-          <blockquote>“旅伴，抓紧了。后世巧匠把长虹卧在江上，正好借来做今日的路！”</blockquote>
+          <blockquote>“后生，抓紧了！这御笔借江风而行。昔年吾在黄鹤楼送别孟浩然，如今江面上竟有钢铁巨舟，远处又横卧长虹。且随吾登楼，看一看后世江城！”</blockquote>
           <button class="primary-button primary-button--paper" type="button" data-action="arrive-map">看见黄鹤楼</button>
         </div>
+        <img class="flight-brush" src="./assets/brush-vehicle.png" alt="幻想载具御笔" />
         <div class="flight-meter" aria-label="飞行进度"><span></span></div>
       </section>
 
@@ -81,25 +93,26 @@
         <div class="scene-tint" aria-hidden="true"></div>
         <header class="explore-hud">
           <div>
-            <p class="eyebrow eyebrow--light">第三章 · 全景寻幽</p>
-            <h2 id="explore-title">楼上有三处旧意</h2>
+            <p class="eyebrow eyebrow--light">第二幕 · 水墨观景</p>
+            <h2 id="explore-title">楼上有两处诗境</h2>
           </div>
           <div class="ink-progress" aria-live="polite">
             <span>寻幽进度</span>
-            <strong data-progress-count>0 / 3</strong>
-            <div class="stamp-row" aria-hidden="true"><i></i><i></i><i></i></div>
+            <strong data-progress-count>0 / 2</strong>
+            <div class="stamp-row" aria-hidden="true"><i></i><i></i></div>
           </div>
         </header>
 
-        <button class="hotspot hotspot--flute" type="button" data-anchor="flute" aria-label="查看玉笛故事">
-          <span class="hotspot-orbit"></span><span class="hotspot-core">笛</span><span class="hotspot-label">玉笛 · 听笛怀远</span>
+        <button class="hotspot hotspot--flute" type="button" data-anchor="jade_flute" aria-label="查看玉笛故事">
+          <span class="hotspot-orbit"></span><span class="hotspot-core"><img src="./assets/jade-flute-icon.png" alt="" /></span><span class="hotspot-label">玉笛 · 听笛怀远</span>
         </button>
-        <button class="hotspot hotspot--crane" type="button" data-anchor="crane" aria-label="查看黄鹤传说">
+        <button class="hotspot hotspot--crane" type="button" data-anchor="golden_crane" aria-label="查看黄鹤传说">
           <span class="hotspot-orbit"></span><span class="hotspot-core">鹤</span><span class="hotspot-label">黄鹤 · 昔人仙踪</span>
         </button>
-        <button class="hotspot hotspot--wall" type="button" data-anchor="wall" aria-label="查看搁笔典故">
-          <span class="hotspot-orbit"></span><span class="hotspot-core">诗</span><span class="hotspot-label">诗壁 · 搁笔留白</span>
-        </button>
+        <nav class="anchor-nav" aria-label="探索锚点快捷入口">
+          <button type="button" data-anchor="jade_flute">玉笛</button>
+          <button type="button" data-anchor="golden_crane">黄鹤</button>
+        </nav>
 
         <aside class="story-panel" aria-live="polite">
           <div class="speaker-row">
@@ -108,9 +121,11 @@
           </div>
           <p class="story-kicker" data-story-type>原创引导</p>
           <h3 data-story-title>且慢，先把眼前的江风看够。</h3>
-          <p class="story-dialogue" data-story-dialogue>楼上藏着三处旧意。任选一处点亮，我便与你讲一段诗与江城的故事。</p>
+          <p class="story-dialogue" data-story-dialogue>楼上有玉笛与黄鹤两处诗境。任选一处点开，听完故事，再决定是否记下这一景。</p>
           <p class="story-note" data-story-note>幻想场景与史实资料分开呈现。</p>
-          <button class="primary-button story-next" type="button" data-action="start-poem" hidden>三枚墨记已齐 · 一起题诗</button>
+          <details class="story-source" data-story-source hidden><summary>查看诗文与典故来源</summary><div data-story-source-content></div></details>
+          <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>记下这一景</button>
+          <button class="primary-button story-next" type="button" data-action="start-poem" hidden>进入下一剧情 · 一起题诗</button>
         </aside>
       </section>
 
@@ -119,38 +134,39 @@
         <button class="text-button back-button" type="button" data-action="back-explore">返回楼上</button>
         <div class="poem-layout">
           <section class="poem-workspace">
-            <p class="eyebrow">第四章 · 触景共题</p>
+            <p class="eyebrow">第三幕 · 触景共题</p>
             <h2 id="poem-title">借你眼中的景，题一首今日的新诗</h2>
-            <p class="poem-intro">选择一至三个意象，也可以写下自己的词。新诗是本次数字旅程的原创演绎，不署作历史李白真迹。</p>
+            <p class="poem-intro">留下 1 至 2 个意象，每个最多 6 个汉字。当前诗稿为规则生成的演示内容，可自行调整；不署作历史李白真迹。</p>
 
             <div class="keyword-section">
               <h3>先收下几样景物</h3>
               <div class="keyword-list" role="group" aria-label="诗歌意象">
                 <button type="button" class="keyword-chip" data-keyword="江风">江风</button>
-                <button type="button" class="keyword-chip" data-keyword="白云">白云</button>
-                <button type="button" class="keyword-chip" data-keyword="帆影">帆影</button>
                 <button type="button" class="keyword-chip" data-keyword="黄鹤">黄鹤</button>
-                <button type="button" class="keyword-chip" data-keyword="玉笛">玉笛</button>
-                <button type="button" class="keyword-chip" data-keyword="霓虹">霓虹</button>
+                <button type="button" class="keyword-chip" data-keyword="长桥">长桥</button>
+                <button type="button" class="keyword-chip" data-keyword="白云">白云</button>
+                <button type="button" class="keyword-chip" data-keyword="笛声">笛声</button>
+                <button type="button" class="keyword-chip" data-keyword="远帆">远帆</button>
               </div>
               <div class="custom-keyword">
                 <label for="custom-word">你的词</label>
-                <input id="custom-word" maxlength="8" placeholder="如：远方、月色" />
+                <input id="custom-word" maxlength="6" placeholder="如：远方、月色" />
                 <button type="button" class="text-button" data-action="add-keyword">收进诗笺</button>
               </div>
               <p class="selection-hint" data-keyword-hint>还未选择意象</p>
             </div>
 
             <div class="poem-actions poem-actions--generate">
-              <button class="primary-button" type="button" data-action="generate-poem">请太白落笔</button>
+              <button class="primary-button" type="button" data-action="generate-poem">生成演示诗稿</button>
             </div>
 
             <div class="draft-editor" data-draft-editor hidden>
-              <div class="draft-header"><span>共题诗笺 · 可直接修改</span><span data-revision>初稿</span></div>
+              <div class="draft-header"><span>共题诗笺 · 规则演示</span><span data-revision>初稿</span></div>
               <label for="poem-name">诗题</label>
               <input id="poem-name" class="title-input" maxlength="12" value="借一笔江风" />
               <label for="poem-lines">诗句</label>
-              <textarea id="poem-lines" rows="4" maxlength="120"></textarea>
+              <textarea id="poem-lines" rows="4" maxlength="100"></textarea>
+              <p class="draft-error" data-draft-error role="alert" hidden></p>
               <div class="poem-actions">
                 <button class="text-button" type="button" data-action="rewrite-poem">再写一版</button>
                 <button class="primary-button" type="button" data-action="adopt-poem">采用此诗</button>
@@ -174,10 +190,13 @@
             <img src="./assets/memory-settlement.png" alt="李白赛博诗旅记忆卡底图" />
             <div class="memory-copy">
               <p class="memory-eyebrow">江城故人 · 李白篇</p>
-              <h2 id="memory-title" data-memory-title>借一笔江风</h2>
+              <h2 id="memory-title">黄鹤楼同游诗旅记忆</h2>
+              <p class="memory-poem-title" data-memory-poem-title></p>
               <div class="memory-poem" data-memory-poem></div>
               <div class="memory-meta">
                 <span>今日意象 <strong data-memory-keywords>江风</strong></span>
+                <span>同行记忆 <strong>玉笛、黄鹤</strong></span>
+                <span class="memory-player-note" data-memory-note-row hidden>我的留言 <strong data-memory-note></strong></span>
                 <span>共题说明 <strong>旅伴与李白 AI 演绎共同构思</strong></span>
               </div>
               <div class="receipt-strip">
@@ -190,9 +209,11 @@
 
           <div class="memory-controls">
             <div>
-              <p class="eyebrow eyebrow--light">第五章 · 带走此刻</p>
+              <p class="eyebrow eyebrow--light">终章 · 带走此刻</p>
               <h3>诗成，记忆已整理</h3>
               <p>卡片只记录你确认采用的意象与诗句。当前版本生成本地摘要与图片，不会假称已经上链。</p>
+              <label class="memory-note-label" for="player-note">留一句给今日的江城（选填，最多 60 字）</label>
+              <textarea id="player-note" maxlength="60" rows="2" placeholder="这一程，我最想记住……"></textarea>
             </div>
             <div class="memory-buttons">
               <button class="primary-button primary-button--paper" type="button" data-action="download-card">下载记忆卡 PNG</button>

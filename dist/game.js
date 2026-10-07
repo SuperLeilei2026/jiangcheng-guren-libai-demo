@@ -1,105 +1,153 @@
 const screens = new Map(
   [...document.querySelectorAll("[data-screen]")].map((screen) => [screen.dataset.screen, screen]),
 );
-
+const ANCHORS = ["jade_flute", "golden_crane"];
+const SITE_TERMS = ["黄鹤", "江城", "长江", "江水", "长桥", "江风", "云楼"];
+const DEFAULT_KEYWORDS = ["江风", "黄鹤", "长桥", "白云", "笛声", "远帆"];
+const characters = {
+  libai: { title: "李白", description: "主题：黄鹤楼诗旅。乘幻想御笔，听玉笛、寻黄鹤，与这位 AI 演绎的故人共题新诗。李白路线现可体验。" },
+  quyuan: { title: "屈原 · 筹备中", description: "主题：江滩楚风；载具：龙舟。角色卡已展示，剧情与互动将在后续补充。" },
+  boya_ziqi: { title: "伯牙与钟子期 · 筹备中", description: "主题：古琴台知音；载具：琴舟。角色卡已展示，剧情与互动将在后续补充。" },
+  zhangzhidong: { title: "张之洞 · 筹备中", description: "主题：汉阳工业；载具：蒸汽火车。暂无角色卡素材，保留静态入口。" },
+};
+const stories = {
+  jade_flute: {
+    type: "诗文 · 玉笛",
+    title: "玉笛声里，江城五月",
+    dialogue: "“黄鹤楼中吹玉笛，江城五月落梅花。”后生，这“梅花”借的是《梅花落》的曲意，也寄着迁客的愁怀。眼前这支玉笛，是今日为你我设下的诗境道具；江风仍在，旧愁已远。你愿把怎样的心绪寄给这江水？",
+    note: "诗句与诗境道具分开呈现，玉笛不作为历史文物实录。",
+    source: "诗句：李白《与史郎中钦听黄鹤楼上吹笛》。笛曲《梅花落》为诗中“落梅花”的曲意来源；此处画面与对白为游戏演绎。",
+  },
+  golden_crane: {
+    type: "典故 · 黄鹤",
+    title: "昔人乘鹤去，后世架长虹",
+    dialogue: "“昔人已乘黄鹤去，此地空余黄鹤楼。”这是崔颢的诗。乘鹤仙踪有不同传说，今日这只金鹤则是为你我点亮的幻想。你看江面上那道跨江长虹，后世巧匠的手段，也可入诗！",
+    note: "金鹤是幻想设计；乘鹤仙踪以传说而非史实呈现。",
+    source: "诗句：崔颢《黄鹤楼》。乘鹤故事存在不同传说版本；画面中的金鹤及李白对白为游戏演绎。",
+  },
+};
 const state = {
   screen: "intro",
+  selectedCharacterId: null,
+  activeAnchorId: null,
   explored: new Set(),
   keywords: [],
-  revision: 0,
+  generationCount: 0,
+  acceptedPoem: null,
   memoryId: "",
   memoryHash: "",
+  transitionTimer: null,
 };
-
-const stories = {
-  flute: {
-    type: "诗文 · 听笛",
-    title: "玉笛声里，五月如飞雪",
-    dialogue:
-      "“黄鹤楼中吹玉笛，江城五月落梅花。”乾元二年途中，我曾把笛声与《梅花落》写进诗里。如今江水仍向东去，旧愁却不必替谁停住脚步。",
-    note: "诗句出自李白《与史郎中钦听黄鹤楼上吹笛》；梅花意象与笛曲相关，不作为五月物候结论。",
-  },
-  crane: {
-    type: "传说 · 黄鹤",
-    title: "昔人乘鹤去，后世架长虹",
-    dialogue:
-      "崔颢诗里写“昔人已乘黄鹤去”。仙人乘鹤是楼名传说，眼前跨江的长桥却是后世真切的巧思。古人的飞天想象，竟在今日有了另一种回声。",
-    note: "黄鹤仙踪按传说呈现；现代桥梁以数字水墨舞台作诗意演绎。",
-  },
-  wall: {
-    type: "典故 · 搁笔",
-    title: "好景不只容得下一种写法",
-    dialogue:
-      "相传我见崔颢题诗，曾叹眼前有景却一时难写。故事归故事，好诗在前，先欣赏也无妨；换个角度，说出自己眼中的江风，同样是一种落笔。",
-    note: "“搁笔”按流传典故讲述，不把舞台对白当作可核验的现场实录。今日黄鹤楼也不是唐代楼宇原物。",
-  },
-};
-
-const poemVariants = [
-  (a, b) => [`${a}入梦到江城`, `${b}照水过晴川`, "玉笛一声梅似雪", "同题新句寄流年"],
-  (a, b, c) => ["黄鹤衔云过楚天", `${a}随风落酒船`, `${b}携我上层楼`, c ? `${c}化作满江秋` : "一笔横江写少年"],
-  (a, b) => [`${a}轻拂鹤楼前`, `${b}遥连天际帆`, "今人不必争诗句", "且把此心付月圆"],
-];
 
 function showScreen(name) {
+  if ((name === "poem" || name === "memory") && state.explored.size !== ANCHORS.length) return false;
   state.screen = name;
   screens.forEach((screen, key) => {
     screen.hidden = key !== name;
     screen.classList.toggle("screen--active", key === name);
   });
   window.scrollTo({ top: 0, behavior: "smooth" });
+  return true;
+}
+
+function selectCharacter(id) {
+  const character = characters[id];
+  if (!character) return;
+  state.selectedCharacterId = id;
+  document.querySelectorAll("[data-character]").forEach((button) => {
+    const selected = button.dataset.character === id;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+  document.querySelector("[data-character-title]").textContent = character.title;
+  document.querySelector("[data-character-description]").textContent = character.description;
+  document.querySelector("[data-action='choose-libai']").hidden = id !== "libai";
 }
 
 function updateExploreUI() {
   const count = state.explored.size;
-  document.querySelector("[data-progress-count]").textContent = `${count} / 3`;
+  document.querySelector("[data-progress-count]").textContent = `${count} / 2`;
   document.querySelectorAll(".stamp-row i").forEach((stamp, index) => {
     stamp.classList.toggle("is-filled", index < count);
   });
   document.querySelectorAll("[data-anchor]").forEach((button) => {
-    const done = state.explored.has(button.dataset.anchor);
-    button.classList.toggle("is-done", done);
-    button.setAttribute("aria-pressed", String(done));
+    const id = button.dataset.anchor;
+    button.classList.toggle("is-done", state.explored.has(id));
+    button.classList.toggle("is-active", state.activeAnchorId === id);
+    button.setAttribute("aria-pressed", String(state.activeAnchorId === id));
   });
-  document.querySelector("[data-action='start-poem']").hidden = count !== 3;
+  document.querySelector("[data-action='start-poem']").hidden = count !== ANCHORS.length;
+}
+
+function setStory(type, title, dialogue, note, source = "") {
+  document.querySelector("[data-story-type]").textContent = type;
+  document.querySelector("[data-story-title]").textContent = title;
+  document.querySelector("[data-story-dialogue]").textContent = dialogue;
+  document.querySelector("[data-story-note]").textContent = note;
+  const details = document.querySelector("[data-story-source]");
+  details.hidden = !source;
+  details.open = false;
+  document.querySelector("[data-story-source-content]").textContent = source;
 }
 
 function openStory(anchor) {
+  if (state.screen !== "explore" || !stories[anchor]) return;
+  state.activeAnchorId = anchor;
   const story = stories[anchor];
-  if (!story) return;
-  state.explored.add(anchor);
-  document.querySelector("[data-story-type]").textContent = story.type;
-  document.querySelector("[data-story-title]").textContent = story.title;
-  document.querySelector("[data-story-dialogue]").textContent = story.dialogue;
-  document.querySelector("[data-story-note]").textContent = story.note;
+  setStory(story.type, story.title, story.dialogue, story.note, story.source);
+  const ack = document.querySelector("[data-action='ack-anchor']");
+  ack.hidden = state.explored.has(anchor);
+  ack.textContent = `记下${anchor === "jade_flute" ? "玉笛" : "黄鹤"}这一景`;
   updateExploreUI();
 }
 
-function cleanKeyword(value) {
-  const cleaned = String(value || "").replace(/[\s，,。！？!?.、]/g, "").slice(0, 2);
-  if (!cleaned) return "";
-  return cleaned.length === 1 ? `${cleaned}影` : cleaned;
+function acknowledgeAnchor() {
+  const anchor = state.activeAnchorId;
+  if (!anchor || !stories[anchor] || state.explored.has(anchor)) return;
+  state.explored.add(anchor);
+  document.querySelector("[data-action='ack-anchor']").hidden = true;
+  updateExploreUI();
+  if (state.explored.size === ANCHORS.length) {
+    state.activeAnchorId = null;
+    setStory(
+      "转场 · 共题",
+      "两处诗境，已经落在心上",
+      "玉笛入耳，黄鹤入梦。且将新句换美酒！后生，今日最留在你心上的是什么？给吾一两个意象，同题此景。",
+      "玉笛与黄鹤两处已完成，正在进入下一剧情。",
+    );
+    updateExploreUI();
+    clearTimeout(state.transitionTimer);
+    state.transitionTimer = setTimeout(() => {
+      if (state.screen === "explore" && state.explored.size === ANCHORS.length) showScreen("poem");
+    }, 1500);
+  } else {
+    const next = ANCHORS.find((id) => !state.explored.has(id));
+    document.querySelector("[data-story-note]").textContent = `已记下这一景。还差${next === "jade_flute" ? "玉笛" : "黄鹤"}，完成后进入下一剧情。`;
+  }
 }
 
-function updateKeywordUI() {
+function cleanKeyword(value) {
+  const cleaned = String(value || "").trim();
+  return /^[\p{Script=Han}]{1,6}$/u.test(cleaned) ? cleaned : "";
+}
+
+function updateKeywordUI(message = "") {
   document.querySelectorAll(".keyword-chip").forEach((button) => {
     const selected = state.keywords.includes(button.dataset.keyword);
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", String(selected));
   });
-  const hint = document.querySelector("[data-keyword-hint]");
-  hint.textContent = state.keywords.length
-    ? `已收进诗笺：${state.keywords.join("、")}（最多三项）`
-    : "还未选择意象";
+  document.querySelector("[data-keyword-hint]").textContent = message ||
+    (state.keywords.length ? `已收进诗笺：${state.keywords.join("、")}（最多两项）` : "还未选择意象");
 }
 
 function toggleKeyword(keyword) {
   if (state.keywords.includes(keyword)) {
     state.keywords = state.keywords.filter((item) => item !== keyword);
-  } else if (state.keywords.length < 3) {
+  } else if (state.keywords.length < 2) {
     state.keywords.push(keyword);
   } else {
-    document.querySelector("[data-keyword-hint]").textContent = "诗笺最多收三项，请先去掉一个意象。";
+    updateKeywordUI("诗笺最多收两项，请先去掉一个意象。");
     return;
   }
   updateKeywordUI();
@@ -109,7 +157,8 @@ function addCustomKeyword() {
   const input = document.querySelector("#custom-word");
   const keyword = cleanKeyword(input.value);
   if (!keyword) {
-    document.querySelector("[data-keyword-hint]").textContent = "写下一个词，再收进诗笺。";
+    updateKeywordUI("请输入 1 至 6 个汉字，不含标点或空格。");
+    input.focus();
     return;
   }
   if (![...document.querySelectorAll(".keyword-chip")].some((button) => button.dataset.keyword === keyword)) {
@@ -124,67 +173,93 @@ function addCustomKeyword() {
   input.value = "";
 }
 
-function generatePoem(isRewrite = false) {
-  if (!state.keywords.length) {
-    document.querySelector("[data-keyword-hint]").textContent = "请先选一个意象，太白才好落笔。";
-    return null;
-  }
+const firstTails = {
+  0: ["来", "起", "明"], 1: ["逐浪", "入画", "满袖"], 2: ["入江城", "过长桥", "映江水"],
+  3: ["随江水去", "照长桥月", "过江城夜"], 4: ["吹过黄鹤楼", "照见长江月", "同上黄鹤楼"],
+  5: ["映黄鹤楼春水", "照长江两岸春", "入江城万里风"],
+};
+const secondTails = {
+  0: ["飞", "归", "长"], 1: ["随风", "逐云", "入诗"], 2: ["照长江", "落江城", "过云楼"],
+  3: ["随江水去", "映长桥灯", "到云楼前"], 4: ["随风入江城", "遥照黄鹤楼", "轻拂长江水"],
+  5: ["随一叶远帆去", "照江城万家灯", "入黄鹤楼前月"],
+};
+const thirdLines = ["黄鹤楼头月未央", "长桥横影入江流", "江城今夜月如舟"];
+const fourthLines = ["与君同题此夜诗", "一笔同书故人游", "此心随鹤过云楼"];
 
-  if (isRewrite) state.revision += 1;
-  const chosen = state.keywords.map(cleanKeyword);
-  const a = chosen[0] || "江风";
-  const b = chosen[1] || "黄鹤";
-  const c = chosen[2] || "";
-  const variant = poemVariants[state.revision % poemVariants.length];
-  const lines = variant(a, b, c);
-  const title = c ? `${a}${c}小记` : `借一笔${a}`;
-
-  document.querySelector("#poem-name").value = title;
-  document.querySelector("#poem-lines").value = lines.join("\n");
-  document.querySelector("[data-draft-editor]").hidden = false;
-  document.querySelector("[data-revision]").textContent = state.revision ? `第 ${state.revision + 1} 稿` : "初稿";
-  document.querySelector("[data-poet-prompt]").textContent = `“${state.keywords.join("、")}都收下了。你若想改，今日便由你落最后一笔。”`;
-  return { title, lines };
+function poemLinesFor(a, b, variant) {
+  const first = a + firstTails[6 - a.length][variant];
+  const second = b ? b + secondTails[6 - b.length][variant] : ["江风吹过长桥月", "江水遥连万里云", "黄鹤翩然入梦来"][variant];
+  return [first, second, thirdLines[variant], fourthLines[variant]];
 }
 
-async function sha256(text) {
-  const bytes = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
+function validatePoem(lines) {
+  if (lines.length !== 4 || lines.some((line) => !/^[\p{Script=Han}]{7}$/u.test(line))) {
+    return "诗稿须为四句，每句恰好七个汉字，不含标点。";
+  }
+  const poem = lines.join("");
+  if (state.keywords.some((word) => !poem.includes(word))) return "诗稿须完整包含已选的每个意象。";
+  if (!SITE_TERMS.some((term) => poem.includes(term))) return "诗稿还需包含一处江城场景意象。";
+  return "";
+}
+
+function generatePoem() {
+  if (state.screen !== "poem") return;
+  if (!state.keywords.length) {
+    updateKeywordUI("请先选一个意象，太白才好落笔。");
+    return;
+  }
+  if (state.generationCount >= 3) {
+    showDraftError("演示诗稿最多生成三次；你仍可直接修改当前诗句。");
+    return;
+  }
+  const variant = state.generationCount;
+  const [a, b] = state.keywords;
+  const lines = poemLinesFor(a, b, variant);
+  state.generationCount += 1;
+  document.querySelector("#poem-name").value = `江城${a}小记`.slice(0, 12);
+  document.querySelector("#poem-lines").value = lines.join("\n");
+  document.querySelector("[data-draft-editor]").hidden = false;
+  document.querySelector("[data-revision]").textContent = `第 ${state.generationCount} 稿 / 共 3 稿`;
+  document.querySelector("[data-poet-prompt]").textContent = `“${state.keywords.join("、")}都收下了。你若想改，今日便由你落最后一笔。”`;
+  document.querySelector("[data-action='rewrite-poem']").disabled = state.generationCount >= 3;
+  document.querySelector("[data-action='generate-poem']").disabled = state.generationCount >= 3;
+  showDraftError("");
+}
+
+function showDraftError(message) {
+  const error = document.querySelector("[data-draft-error]");
+  error.textContent = message;
+  error.hidden = !message;
+}
+
+async function sha256(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>'"]/g, (char) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "'": "&#39;",
-    '"': "&quot;",
-  })[char]);
-}
-
 async function buildMemory() {
-  const title = document.querySelector("#poem-name").value.trim() || "江城新句";
-  const lines = document.querySelector("#poem-lines").value.split("\n").map((line) => line.trim()).filter(Boolean).slice(0, 6);
-  if (!lines.length) {
+  if (state.explored.size !== ANCHORS.length || state.generationCount === 0) return;
+  const lines = document.querySelector("#poem-lines").value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const error = validatePoem(lines);
+  if (error) {
+    showDraftError(error);
     document.querySelector("#poem-lines").focus();
     return;
   }
-
-  state.memoryId = `JC-LB-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  const poemTitle = document.querySelector("#poem-name").value.trim() || "江城新句";
+  state.acceptedPoem = { title: poemTitle, lines };
+  state.memoryId = `JC-LB-DEMO-${Date.now().toString(36).toUpperCase()}`;
   const payload = {
-    memoryId: state.memoryId,
-    characterId: "libai",
-    packageVersion: "libai_yellow_crane_demo_v1",
-    title,
-    lines,
-    keywords: [...state.keywords],
-    provenance: "local_demo_confirmed",
+    memoryId: state.memoryId, characterId: "libai", anchorIds: ANCHORS,
+    title: poemTitle, lines, keywords: [...state.keywords], status: "local_demo_unregistered",
   };
   state.memoryHash = await sha256(JSON.stringify(payload));
-
-  document.querySelector("[data-memory-title]").textContent = title;
-  document.querySelector("[data-memory-poem]").innerHTML = lines.map((line) => `<p>${escapeHtml(line)}</p>`).join("");
+  document.querySelector("[data-memory-poem-title]").textContent = poemTitle;
+  document.querySelector("[data-memory-poem]").replaceChildren(...lines.map((line) => {
+    const p = document.createElement("p");
+    p.textContent = line;
+    return p;
+  }));
   document.querySelector("[data-memory-keywords]").textContent = state.keywords.join("、");
   document.querySelector("[data-memory-id]").textContent = state.memoryId;
   document.querySelector("[data-memory-hash]").textContent = `${state.memoryHash.slice(0, 12)}…${state.memoryHash.slice(-8)}`;
@@ -200,153 +275,161 @@ function loadImage(src) {
   });
 }
 
+function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+  let line = "";
+  let count = 0;
+  for (const char of text) {
+    const next = line + char;
+    if (ctx.measureText(next).width > maxWidth && line) {
+      ctx.fillText(line, x, y + count * lineHeight);
+      count += 1;
+      if (count >= maxLines) return;
+      line = char;
+    } else {
+      line = next;
+    }
+  }
+  if (line && count < maxLines) ctx.fillText(line, x, y + count * lineHeight);
+}
+
 async function downloadCard() {
+  if (!state.acceptedPoem || state.screen !== "memory") return;
   const canvas = document.createElement("canvas");
-  canvas.width = 1672;
-  canvas.height = 941;
+  canvas.width = 1920;
+  canvas.height = 1080;
   const ctx = canvas.getContext("2d");
   const background = await loadImage("./assets/memory-settlement.png");
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-  const title = document.querySelector("[data-memory-title]").textContent;
-  const lines = [...document.querySelectorAll("[data-memory-poem] p")].map((p) => p.textContent);
   ctx.fillStyle = "#9c3f35";
-  ctx.font = "700 24px system-ui";
-  ctx.fillText("江城故人 · 李白篇", 820, 145);
+  ctx.font = "700 27px system-ui";
+  ctx.fillText("江城故人 · 李白篇", 965, 140);
   ctx.fillStyle = "#17383b";
   ctx.font = "700 58px 'Songti SC', serif";
-  ctx.fillText(title.slice(0, 12), 820, 220);
-  ctx.font = "34px 'Songti SC', serif";
-  lines.slice(0, 6).forEach((line, index) => ctx.fillText(line.slice(0, 24), 825, 305 + index * 58));
-  ctx.fillStyle = "rgba(23,56,59,.12)";
-  ctx.fillRect(810, 700, 760, 105);
+  ctx.fillText("黄鹤楼同游诗旅记忆", 965, 222);
+  ctx.font = "30px 'Songti SC', serif";
+  ctx.fillText(state.acceptedPoem.title.slice(0, 12), 968, 280);
+  ctx.font = "38px 'Songti SC', serif";
+  state.acceptedPoem.lines.forEach((line, index) => ctx.fillText(line, 968, 360 + index * 65));
   ctx.fillStyle = "#365c61";
-  ctx.font = "20px system-ui";
-  ctx.fillText(`今日意象：${state.keywords.join("、")}`, 835, 738);
-  ctx.fillText(`记忆编号：${state.memoryId}`, 835, 775);
+  ctx.font = "24px system-ui";
+  ctx.fillText(`今日意象：${state.keywords.join("、")}`, 968, 690);
+  ctx.fillText("同行记忆：玉笛、黄鹤", 968, 730);
+  const note = document.querySelector("#player-note").value.trim();
+  if (note) {
+    ctx.font = "21px system-ui";
+    wrapText(ctx, `我的留言：${note}`, 968, 784, 780, 32, 2);
+  }
+  ctx.font = "19px system-ui";
+  ctx.fillText("同游寄语：江风作伴，今日新句留与君。", 968, 865);
+  ctx.fillText(`记忆编号：${state.memoryId}`, 968, 918);
   ctx.fillStyle = "#8b5e50";
-  ctx.font = "700 18px system-ui";
-  ctx.fillText("演示回执 · 未登记 BOT Chain", 835, 845);
-
+  ctx.font = "700 20px system-ui";
+  ctx.fillText("演示回执 · 未登记 BOT Chain", 968, 970);
   const link = document.createElement("a");
-  link.download = `${state.memoryId || "jiangcheng-libai-memory"}.png`;
+  link.download = `${state.memoryId}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
 
 function resetJourney() {
+  clearTimeout(state.transitionTimer);
+  state.activeAnchorId = null;
   state.explored.clear();
   state.keywords = [];
-  state.revision = 0;
+  state.generationCount = 0;
+  state.acceptedPoem = null;
   state.memoryId = "";
   state.memoryHash = "";
   document.querySelector("[data-draft-editor]").hidden = true;
   document.querySelector("#poem-lines").value = "";
+  document.querySelector("#player-note").value = "";
+  document.querySelector("[data-memory-note-row]").hidden = true;
+  document.querySelector("[data-action='generate-poem']").disabled = false;
+  document.querySelector("[data-action='rewrite-poem']").disabled = false;
   document.querySelectorAll(".keyword-chip[data-keyword]").forEach((button) => {
-    if (!["江风", "白云", "帆影", "黄鹤", "玉笛", "霓虹"].includes(button.dataset.keyword)) button.remove();
+    if (!DEFAULT_KEYWORDS.includes(button.dataset.keyword)) button.remove();
   });
+  setStory("原创引导", "且慢，先把眼前的江风看够。", "楼上有玉笛与黄鹤两处诗境。任选一处点开，听完故事，再决定是否记下这一景。", "幻想场景与史实资料分开呈现。");
+  document.querySelector("[data-action='ack-anchor']").hidden = true;
+  selectCharacter("libai");
   updateKeywordUI();
   updateExploreUI();
   showScreen("select");
 }
 
 document.addEventListener("click", async (event) => {
+  const character = event.target.closest("[data-character]")?.dataset.character;
+  if (character) { selectCharacter(character); return; }
   const anchor = event.target.closest("[data-anchor]")?.dataset.anchor;
-  if (anchor) {
-    openStory(anchor);
-    return;
-  }
-
+  if (anchor) { openStory(anchor); return; }
   const keyword = event.target.closest(".keyword-chip")?.dataset.keyword;
-  if (keyword) {
-    toggleKeyword(keyword);
-    return;
-  }
-
+  if (keyword) { toggleKeyword(keyword); return; }
   const action = event.target.closest("[data-action]")?.dataset.action;
   if (!action) return;
   if (action === "enter") showScreen("select");
-  if (action === "choose-libai") showScreen("flight");
+  if (action === "choose-libai" && state.selectedCharacterId === "libai") showScreen("flight");
   if (action === "back-select") showScreen("select");
   if (action === "arrive-map") showScreen("map");
   if (action === "enter-tower") showScreen("explore");
+  if (action === "ack-anchor") acknowledgeAnchor();
   if (action === "start-poem") showScreen("poem");
   if (action === "back-explore") showScreen("explore");
   if (action === "add-keyword") addCustomKeyword();
-  if (action === "generate-poem") generatePoem(false);
-  if (action === "rewrite-poem") generatePoem(true);
+  if (action === "generate-poem" || action === "rewrite-poem") generatePoem();
   if (action === "adopt-poem") await buildMemory();
   if (action === "download-card") await downloadCard();
   if (action === "restart") resetJourney();
 });
-
 document.querySelector("#custom-word").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    addCustomKeyword();
-  }
+  if (event.key === "Enter") { event.preventDefault(); addCustomKeyword(); }
+});
+document.querySelector("#player-note").addEventListener("input", (event) => {
+  const note = event.target.value.trim();
+  document.querySelector("[data-memory-note]").textContent = note;
+  document.querySelector("[data-memory-note-row]").hidden = !note;
 });
 
 function registerWebMcpTools() {
   const context = document.modelContext;
   if (!context?.registerTool) return;
-  const lifecycle = new AbortController();
-  const options = { signal: lifecycle.signal };
   const report = (error) => console.warn("WebMCP registration failed", error);
   const tools = [
     {
-      name: "get_li_bai_journey_state",
-      title: "读取李白旅程状态",
-      description: "读取当前游戏画面、寻幽进度、已采用意象和记忆编号，不改变游戏状态。",
+      name: "get_li_bai_journey_state", title: "读取李白旅程状态",
+      description: "读取画面、两处已确认的诗境、意象和本地记忆编号，不改变状态。",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       annotations: { readOnlyHint: true, untrustedContentHint: false },
-      execute() {
-        return { screen: state.screen, exploredAnchors: [...state.explored], keywords: [...state.keywords], memoryId: state.memoryId || null };
-      },
+      execute() { return { screen: state.screen, exploredAnchors: [...state.explored], keywords: [...state.keywords], memoryId: state.memoryId || null }; },
     },
     {
-      name: "start_li_bai_journey",
-      title: "开始李白旅程",
-      description: "选择李白并打开御笔飞行画面，与界面的“与太白同行”按钮效果相同。",
+      name: "start_li_bai_journey", title: "开始李白旅程",
+      description: "选择李白并打开御笔飞行画面。",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
-      execute() {
-        showScreen("flight");
-        return { screen: state.screen, characterId: "libai" };
-      },
+      execute() { selectCharacter("libai"); showScreen("flight"); return { screen: state.screen, characterId: "libai" }; },
     },
     {
-      name: "stage_poem_keywords",
-      title: "设置共题诗意象",
-      description: "把一至三个意象收进共题诗笺并打开题诗画面，不会自动采用或下载最终诗作。",
+      name: "stage_poem_keywords", title: "设置共题诗意象",
+      description: "仅在玉笛、黄鹤两处都确认后，收进一至两个意象并打开题诗画面。",
       inputSchema: {
         type: "object",
-        properties: { keywords: { type: "array", minItems: 1, maxItems: 3, items: { type: "string", minLength: 1, maxLength: 8 } } },
-        required: ["keywords"],
-        additionalProperties: false,
+        properties: { keywords: { type: "array", minItems: 1, maxItems: 2, items: { type: "string", minLength: 1, maxLength: 6 } } },
+        required: ["keywords"], additionalProperties: false,
       },
       annotations: { readOnlyHint: false, untrustedContentHint: true },
       execute(input) {
-        if (!input || !Array.isArray(input.keywords) || input.keywords.length < 1 || input.keywords.length > 3) {
-          throw new TypeError("keywords must contain one to three strings");
-        }
+        if (state.explored.size !== ANCHORS.length) throw new Error("请先确认玉笛和黄鹤两处剧情。");
+        if (!Array.isArray(input?.keywords) || input.keywords.length < 1 || input.keywords.length > 2) throw new TypeError("keywords 须为一至两个意象");
         const next = input.keywords.map(cleanKeyword);
-        if (next.some((value) => !value)) throw new TypeError("each keyword must contain visible text");
-        state.keywords = [...new Set(next)].slice(0, 3);
+        if (next.some((word) => !word) || new Set(next).size !== next.length) throw new TypeError("每个意象须为 1 至 6 个不同的汉字词");
+        state.keywords = next;
         updateKeywordUI();
         showScreen("poem");
         return { screen: state.screen, keywords: [...state.keywords] };
       },
     },
   ];
-
-  tools.forEach((tool) => {
-    try {
-      Promise.resolve(context.registerTool(tool, options)).catch(report);
-    } catch (error) {
-      report(error);
-    }
-  });
+  tools.forEach((tool) => { try { Promise.resolve(context.registerTool(tool)).catch(report); } catch (error) { report(error); } });
 }
 
 updateExploreUI();
