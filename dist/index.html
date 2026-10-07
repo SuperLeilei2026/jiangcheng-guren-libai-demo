@@ -100,11 +100,11 @@
             <p class="eyebrow eyebrow--light">第二幕 · 水墨观景</p>
             <h2 id="explore-title">楼上有两处诗境</h2>
           </div>
-          <button class="ink-progress" type="button" data-action="complete-active" aria-live="polite" aria-label="点击完成当前诗境旅程">
+          <div class="ink-progress" aria-live="polite" aria-label="寻幽进度">
             <span>寻幽进度</span>
             <strong data-progress-count>0 / 2</strong>
             <div class="stamp-row" aria-hidden="true"><i></i><i></i></div>
-          </button>
+          </div>
         </header>
 
         <button class="hotspot hotspot--flute" type="button" data-anchor="jade_flute" aria-label="查看玉笛故事">
@@ -117,20 +117,7 @@
           <button type="button" data-anchor="jade_flute">玉笛</button>
           <button type="button" data-anchor="golden_crane">黄鹤</button>
         </nav>
-
-        <aside class="story-panel" data-story-panel aria-live="polite">
-          <div class="speaker-row">
-            <span class="speaker-seal">白</span>
-            <div><span>同行者</span><strong>李白 · AI 演绎</strong></div>
-          </div>
-          <p class="story-kicker" data-story-type>原创引导</p>
-          <h3 data-story-title>且慢，先把眼前的江风看够。</h3>
-          <p class="story-dialogue" data-story-dialogue>楼上有玉笛与黄鹤两处诗境。任选一处点开，听完故事，再决定是否记下这一景。</p>
-          <p class="story-note" data-story-note>幻想场景与史实资料分开呈现。</p>
-          <details class="story-source" data-story-source hidden><summary>查看诗文与典故来源</summary><div data-story-source-content></div></details>
-          <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>完成旅程</button>
-          <button class="primary-button story-next" type="button" data-action="start-poem" hidden>进入下一剧情 · 一起题诗</button>
-        </aside>
+        <button class="primary-button explore-next" type="button" data-action="start-poem" hidden>进入下一旅程 · 一起题诗</button>
         <dialog class="anchor-media-dialog" data-anchor-dialog data-flute-dialog aria-label="玉笛诗境动效">
           <button class="anchor-dialog-close" type="button" data-action="close-anchor-dialog" aria-label="关闭玉笛动效">×</button>
           <img src="./assets/jade-flute.gif" alt="玉笛置于案上，梅花飘落的动画" />
@@ -141,6 +128,7 @@
             <h3 data-journey-title></h3>
             <p class="journey-dialogue" data-journey-dialogue></p>
             <p class="journey-note" data-journey-note></p>
+            <details class="journey-source"><summary>查看诗文与典故来源</summary><div data-journey-source></div></details>
             <button class="primary-button journey-ack" type="button" data-action="ack-anchor">完成旅程</button>
           </aside>
         </dialog>
@@ -154,6 +142,7 @@
             <h3 data-journey-title></h3>
             <p class="journey-dialogue" data-journey-dialogue></p>
             <p class="journey-note" data-journey-note></p>
+            <details class="journey-source"><summary>查看诗文与典故来源</summary><div data-journey-source></div></details>
             <button class="primary-button journey-ack" type="button" data-action="ack-anchor">完成旅程</button>
           </aside>
         </dialog>

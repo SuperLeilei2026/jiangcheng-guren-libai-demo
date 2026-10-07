@@ -132,9 +132,7 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
 .scene-tint { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 24, 28, .76), transparent 38%, rgba(7, 24, 28, .25)); pointer-events: none; }
 .explore-hud { position: absolute; z-index: 5; inset: 0 0 auto; display: flex; align-items: start; justify-content: space-between; gap: 22px; padding: 28px clamp(22px, 4vw, 62px); }
 .explore-hud h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.8rem); }
-.ink-progress { display: grid; grid-template-columns: auto auto; align-items: baseline; gap: 6px 16px; padding: 14px 18px; border: 1px solid rgba(255,255,255,.42); border-radius: 14px 3px 14px 3px; color: #fff8e8; background: rgba(10, 39, 44, .74); backdrop-filter: blur(14px); cursor: pointer; font: .78rem/1.2 system-ui, sans-serif; text-align: left; }
-.ink-progress:hover { background: rgba(23,76,84,.9); }
-.ink-progress:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.ink-progress { display: grid; grid-template-columns: auto auto; align-items: baseline; gap: 6px 16px; padding: 14px 18px; border: 1px solid rgba(255,255,255,.42); border-radius: 14px 3px 14px 3px; color: #fff8e8; background: rgba(10, 39, 44, .74); backdrop-filter: blur(14px); font: .78rem/1.2 system-ui, sans-serif; text-align: left; }
 .ink-progress strong { font-size: 1rem; }
 .stamp-row { grid-column: 1 / -1; display: flex; gap: 8px; }
 .stamp-row i { width: 21px; height: 21px; border: 1px solid rgba(255,255,255,.42); border-radius: 50%; }
@@ -158,34 +156,29 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
 .anchor-nav button { padding: 11px 18px; border: 1px solid rgba(255,255,255,.56); border-radius: 999px; color: #fff; background: rgba(5,34,39,.8); cursor: pointer; }
 .anchor-nav button.is-done { background: var(--cinnabar); }
 .anchor-nav button.is-active { outline: 2px solid #fff; }
-.story-panel { position: absolute; z-index: 6; right: clamp(18px, 4vw, 62px); bottom: clamp(18px, 4vw, 48px); width: min(480px, calc(100vw - 36px)); padding: 22px 24px; border: 1px solid rgba(255,255,255,.42); border-radius: 24px 5px 24px 5px; color: #14363b; background: rgba(242, 235, 214, .94); box-shadow: 0 28px 80px rgba(4, 20, 24, .38); backdrop-filter: blur(18px); opacity: 0; pointer-events: none; transform: translateY(12px); }
-.story-panel.is-visible { pointer-events: auto; animation: story-panel-in 420ms ease both; }
-@keyframes story-panel-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.explore-next { position: absolute; z-index: 7; left: 50%; bottom: clamp(18px, 4vw, 48px); transform: translateX(-50%); min-width: min(330px, calc(100vw - 40px)); padding: 16px 26px; border: 1px solid rgba(255,255,255,.6); background: #a23c31; box-shadow: 0 18px 50px rgba(0,0,0,.38); }
+.explore-next:hover { transform: translate(-50%, -2px); background: #8e3027; }
 .speaker-row { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; font: .75rem/1.3 system-ui, sans-serif; }
 .speaker-row div { display: grid; }
 .speaker-row span:not(.speaker-seal) { color: var(--ink-soft); }
 .speaker-seal { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 8px 2px 8px 2px; color: #fff; background: var(--cinnabar); font: 700 1.1rem/1 serif; }
 .story-kicker { margin: 0 0 5px; color: var(--cinnabar); font: 700 .72rem/1.2 system-ui, sans-serif; letter-spacing: .17em; }
-.story-panel h3 { margin: 0 0 10px; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.25; }
-.story-dialogue { margin: 0; font-size: 1rem; line-height: 1.78; }
-.story-note { margin: 13px 0 0; color: var(--ink-soft); font: .78rem/1.55 system-ui, sans-serif; }
-.story-source { margin-top: 10px; color: var(--ink-soft); font: .78rem/1.55 system-ui, sans-serif; }
-.story-source summary { cursor: pointer; font-weight: 700; }
-.story-source div { margin-top: 6px; }
-.story-ack, .story-next { width: 100%; margin-top: 15px; }
 .anchor-media-dialog { position: fixed; width: min(960px, 88vw); max-width: none; max-height: 88svh; padding: 12px 12px 0; border: 1px solid rgba(255,239,191,.8); border-radius: 22px 5px 22px 5px; color: #fdf3dd; background: #102f35; box-shadow: 0 28px 90px rgba(0,0,0,.55); }
 .anchor-media-dialog:not([open]) { display: none; }
 .anchor-media-dialog::backdrop { background: rgba(5,22,27,.72); backdrop-filter: blur(5px); }
 .anchor-media-dialog img { display: block; width: 100%; height: auto; max-height: 72svh; object-fit: contain; border-radius: 12px 2px 12px 2px; }
 .anchor-media-dialog p { margin: 11px 4px 13px; font-size: 1.1rem; }
 .anchor-dialog-close { position: absolute; z-index: 2; right: 18px; top: 18px; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.65); border-radius: 50%; color: #fff; background: rgba(4,18,22,.8); cursor: pointer; font: 1.8rem/1 system-ui, sans-serif; }
-.journey-card { position: absolute; z-index: 1; right: 24px; bottom: 56px; width: min(440px, calc(100% - 48px)); max-height: min(70svh, 510px); overflow: auto; padding: 22px 24px; border: 1px solid rgba(255,255,255,.6); border-radius: 24px 5px 24px 5px; color: var(--ink); background: rgba(242,235,214,.95); box-shadow: 0 22px 65px rgba(0,0,0,.36); backdrop-filter: blur(14px); animation: journey-card-in .65s .45s ease both; }
-@keyframes journey-card-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+.journey-card { position: absolute; z-index: 1; left: 50%; top: 50%; width: min(540px, calc(100% - 44px)); max-height: min(70svh, 570px); overflow: auto; padding: 22px 24px; border: 1px solid rgba(255,255,255,.7); border-radius: 24px 5px 24px 5px; color: var(--ink); background: rgba(242,235,214,.78); box-shadow: 0 22px 65px rgba(0,0,0,.3); backdrop-filter: blur(10px); animation: journey-card-in .65s .45s ease both; }
+@keyframes journey-card-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 18px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
 .journey-card .speaker-row { margin-bottom: 13px; }
 .journey-card .story-kicker { margin: 0 0 5px; color: var(--cinnabar); font: 700 .72rem/1.2 system-ui, sans-serif; }
 .journey-card h3 { margin: 0 0 9px; font-size: clamp(1.35rem, 2.3vw, 1.85rem); line-height: 1.28; }
 .journey-card .journey-dialogue { margin: 0; font-size: clamp(.92rem, 1.3vw, 1.08rem); line-height: 1.68; }
 .journey-note { margin: 9px 0 0 !important; color: var(--ink-soft); font: .8rem/1.45 system-ui, sans-serif !important; }
+.journey-source { margin-top: 8px; color: var(--ink-soft); font: .78rem/1.45 system-ui, sans-serif; }
+.journey-source summary { cursor: pointer; font-weight: 700; }
+.journey-source div { margin-top: 5px; }
 .journey-ack { width: 100%; margin-top: 12px; }
 
 /* 共题诗 */
@@ -223,8 +216,8 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
 
 /* 记忆卡 */
 .memory-screen { display: grid; place-items: center; min-height: 100svh; color: #fff5df; background: radial-gradient(circle at 70% 24%, #1e5b60, transparent 34%), #0b252a; }
-.memory-stage { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr); gap: clamp(26px, 5vw, 72px); width: min(1420px, 100%); align-items: center; }
-.memory-card { position: relative; overflow: hidden; min-height: 520px; aspect-ratio: 1672 / 941; border: 1px solid rgba(255,255,255,.42); border-radius: 26px 7px 26px 7px; box-shadow: 0 34px 100px rgba(0,0,0,.42); background: #e9dfc8; }
+.memory-stage { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .55fr); gap: clamp(26px, 4vw, 60px); width: min(1420px, 100%); align-items: center; }
+.memory-card { position: relative; width: 100%; min-width: 0; height: clamp(520px, 42vw, 620px); overflow: hidden; border: 1px solid rgba(255,255,255,.42); border-radius: 26px 7px 26px 7px; box-shadow: 0 34px 100px rgba(0,0,0,.42); background: #e9dfc8; }
 .memory-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .memory-copy { position: absolute; inset: 8% 5% 7% 48%; display: flex; flex-direction: column; color: var(--ink); }
 .memory-eyebrow { margin: 0 0 2%; color: var(--cinnabar); font: 700 clamp(.55rem, .85vw, .8rem)/1 system-ui, sans-serif; letter-spacing: .18em; }
@@ -252,6 +245,11 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
 @keyframes screen-in { from { opacity: 0; transform: scale(1.01); } to { opacity: 1; transform: scale(1); } }
 .screen--active { animation: screen-in 420ms ease both; }
 
+@media (max-width: 1200px) {
+  .memory-stage { grid-template-columns: 1fr; }
+  .memory-card { height: 560px; }
+  .memory-controls { max-width: 700px; }
+}
 @media (max-width: 980px) {
   .character-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
   .character-card img { height: min(42vh, 410px); }
@@ -261,11 +259,9 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
   .card-caption strong { font-size: .58rem; padding: 5px 6px; }
   .poem-layout { grid-template-columns: 1fr; }
   .poet-companion { min-height: 460px; }
-  .memory-stage { grid-template-columns: 1fr; }
-  .memory-card { width: 100%; min-height: 560px; aspect-ratio: auto; }
+  .memory-card { min-height: 560px; }
   .memory-copy { inset: 7% 5% 6% 46%; }
   .memory-meta { font-size: 1rem; }
-  .memory-controls { max-width: 700px; }
 }
 @media (max-width: 650px) {
   .screen { padding: 24px 18px; }
@@ -297,15 +293,13 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
   .hotspot-core { width: 46px; height: 46px; }
   .hotspot-label { display: none; }
   .anchor-nav { left: 18px; bottom: auto; top: 105px; }
-  .story-panel { right: 12px; bottom: 12px; padding: 15px; max-height: 58vh; overflow: auto; }
   .anchor-media-dialog { width: 94vw; padding: 8px 8px 0; }
-  .journey-card { right: 16px; bottom: 50px; width: min(390px, calc(100% - 32px)); max-height: 65svh; padding: 15px; }
-  .story-dialogue { font-size: .93rem; line-height: 1.62; }
+  .journey-card { width: calc(100% - 28px); max-height: 65svh; padding: 15px; }
   .poem-screen { overflow: auto; }
   .poem-layout { margin-top: 50px; }
   .poet-companion { min-height: 390px; order: -1; }
   .memory-screen { padding-inline: 12px; }
-  .memory-card { min-height: 700px; }
+  .memory-card { height: max(760px, 100svh); }
   .memory-card > img { height: 48%; object-position: left center; }
   .memory-copy { inset: 45% 5% 5%; padding: 14px; border-radius: 12px; background: rgba(250,246,232,.9); }
   .memory-copy h2 { font-size: clamp(1.25rem, 6vw, 2rem); }

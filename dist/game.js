@@ -36,7 +36,6 @@ const state = {
   acceptedPoem: null,
   memoryId: "",
   memoryHash: "",
-  transitionTimer: null,
   mapFlightTimer: null,
   mapFlying: false,
 };
@@ -131,10 +130,6 @@ function selectCharacter(id, { launch = false } = {}) {
 function updateExploreUI() {
   const count = state.explored.size;
   document.querySelector("[data-progress-count]").textContent = `${count} / 2`;
-  document.querySelector("[data-action='complete-active']").setAttribute(
-    "aria-label",
-    state.activeAnchorId && !state.explored.has(state.activeAnchorId) ? `完成${state.activeAnchorId === "jade_flute" ? "玉笛" : "黄鹤"}旅程，当前进度 ${count} / 2` : `寻幽进度 ${count} / 2`,
-  );
   document.querySelectorAll(".stamp-row i").forEach((stamp, index) => {
     stamp.classList.toggle("is-filled", index < count);
   });
@@ -147,28 +142,10 @@ function updateExploreUI() {
   document.querySelector("[data-action='start-poem']").hidden = count !== ANCHORS.length;
 }
 
-function setStory(type, title, dialogue, note, source = "") {
-  document.querySelector("[data-story-type]").textContent = type;
-  document.querySelector("[data-story-title]").textContent = title;
-  document.querySelector("[data-story-dialogue]").textContent = dialogue;
-  document.querySelector("[data-story-note]").textContent = note;
-  const details = document.querySelector("[data-story-source]");
-  details.hidden = !source;
-  details.open = false;
-  document.querySelector("[data-story-source-content]").textContent = source;
-}
-
 function openStory(anchor) {
   if (state.screen !== "explore" || !stories[anchor]) return;
   state.activeAnchorId = anchor;
   const story = stories[anchor];
-  setStory(story.type, story.title, story.dialogue, story.note, story.source);
-  const ack = document.querySelector("[data-action='ack-anchor']");
-  ack.hidden = state.explored.has(anchor);
-  ack.textContent = "完成旅程";
-  const panel = document.querySelector("[data-story-panel]");
-  panel.classList.remove("is-visible");
-  requestAnimationFrame(() => panel.classList.add("is-visible"));
   updateExploreUI();
   const dialog = document.querySelector(anchor === "jade_flute" ? "[data-flute-dialog]" : "[data-crane-dialog]");
   if (dialog && !dialog.open) {
@@ -176,6 +153,8 @@ function openStory(anchor) {
     dialog.querySelector("[data-journey-title]").textContent = story.title;
     dialog.querySelector("[data-journey-dialogue]").textContent = story.dialogue;
     dialog.querySelector("[data-journey-note]").textContent = story.note;
+    dialog.querySelector("[data-journey-source]").textContent = story.source;
+    dialog.querySelector(".journey-source").open = false;
     dialog.querySelector(".journey-ack").hidden = state.explored.has(anchor);
     const animation = dialog.querySelector("img");
     animation.src = animation.src;
@@ -187,26 +166,9 @@ function acknowledgeAnchor() {
   const anchor = state.activeAnchorId;
   if (!anchor || !stories[anchor] || state.explored.has(anchor)) return;
   state.explored.add(anchor);
+  state.activeAnchorId = null;
   document.querySelectorAll("[data-anchor-dialog]").forEach((dialog) => { if (dialog.open) dialog.close(); });
-  document.querySelector("[data-action='ack-anchor']").hidden = true;
   updateExploreUI();
-  if (state.explored.size === ANCHORS.length) {
-    state.activeAnchorId = null;
-    setStory(
-      "转场 · 共题",
-      "两处诗境，已经落在心上",
-      "玉笛入耳，黄鹤入梦。且将新句换美酒！后生，今日最留在你心上的是什么？给吾一两个意象，同题此景。",
-      "玉笛与黄鹤两处已完成，正在进入下一剧情。",
-    );
-    updateExploreUI();
-    clearTimeout(state.transitionTimer);
-    state.transitionTimer = setTimeout(() => {
-      if (state.screen === "explore" && state.explored.size === ANCHORS.length) showScreen("poem");
-    }, 1500);
-  } else {
-    const next = ANCHORS.find((id) => !state.explored.has(id));
-    document.querySelector("[data-story-note]").textContent = `已完成这一程。还差${next === "jade_flute" ? "玉笛" : "黄鹤"}，完成后进入下一剧情。`;
-  }
 }
 
 function cleanKeyword(value) {
@@ -397,7 +359,6 @@ async function downloadCard() {
 }
 
 function resetJourney() {
-  clearTimeout(state.transitionTimer);
   resetMapFlight();
   state.activeAnchorId = null;
   state.explored.clear();
@@ -415,9 +376,6 @@ function resetJourney() {
   document.querySelectorAll(".keyword-chip[data-keyword]").forEach((button) => {
     if (!DEFAULT_KEYWORDS.includes(button.dataset.keyword)) button.remove();
   });
-  setStory("原创引导", "且慢，先把眼前的江风看够。", "楼上有玉笛与黄鹤两处诗境。任选一处点开，听完故事，再完成这一程。", "幻想场景与史实资料分开呈现。");
-  document.querySelector("[data-action='ack-anchor']").hidden = true;
-  document.querySelector("[data-story-panel]").classList.remove("is-visible");
   selectCharacter("libai");
   updateKeywordUI();
   updateExploreUI();
@@ -440,7 +398,7 @@ document.addEventListener("click", async (event) => {
   if (action === "arrive-map") showScreen("map");
   if (action === "enter-tower") beginMapFlight();
   if (action === "close-anchor-dialog") event.target.closest("dialog")?.close();
-  if (action === "ack-anchor" || action === "complete-active") acknowledgeAnchor();
+  if (action === "ack-anchor") acknowledgeAnchor();
   if (action === "start-poem") showScreen("poem");
   if (action === "back-explore") showScreen("explore");
   if (action === "generate-poem" || action === "rewrite-poem") generatePoem();
