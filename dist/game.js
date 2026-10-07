@@ -8,7 +8,7 @@ const characters = {
   libai: { title: "李白", description: "主题：黄鹤楼诗旅。乘幻想御笔，听玉笛、寻黄鹤，与这位 AI 演绎的故人共题新诗。李白路线现可体验。" },
   quyuan: { title: "屈原 · 筹备中", description: "主题：江滩楚风；载具：龙舟。角色卡已展示，剧情与互动将在后续补充。" },
   boya_ziqi: { title: "伯牙与钟子期 · 筹备中", description: "主题：古琴台知音；载具：琴舟。角色卡已展示，剧情与互动将在后续补充。" },
-  zhangzhidong: { title: "张之洞 · 筹备中", description: "主题：汉阳工业；载具：蒸汽火车。暂无角色卡素材，保留静态入口。" },
+  zhangzhidong: { title: "张之洞 · 筹备中", description: "主题：汉阳工业；载具：蒸汽火车。角色卡已展示，剧情与互动将在后续补充。" },
 };
 const stories = {
   jade_flute: {
@@ -37,10 +37,14 @@ const state = {
   memoryId: "",
   memoryHash: "",
   transitionTimer: null,
+  mapFlightTimer: null,
+  mapFlying: false,
 };
 
 function showScreen(name) {
   if ((name === "poem" || name === "memory") && state.explored.size !== ANCHORS.length) return false;
+  const fluteDialog = document.querySelector("[data-flute-dialog]");
+  if (name !== "explore" && fluteDialog.open) fluteDialog.close();
   state.screen = name;
   screens.forEach((screen, key) => {
     screen.hidden = key !== name;
@@ -48,6 +52,35 @@ function showScreen(name) {
   });
   window.scrollTo({ top: 0, behavior: "smooth" });
   return true;
+}
+
+function resetMapFlight() {
+  clearTimeout(state.mapFlightTimer);
+  state.mapFlying = false;
+  document.querySelector("[data-screen='map']").classList.remove("is-flying");
+  document.querySelector("[data-map-flight-gif]").hidden = true;
+  document.querySelector("[data-map-flight-status]").hidden = true;
+  document.querySelector("[data-action='enter-tower']").disabled = false;
+}
+
+function beginMapFlight() {
+  if (state.screen !== "map" || state.mapFlying) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    showScreen("explore");
+    return;
+  }
+  state.mapFlying = true;
+  document.querySelector("[data-screen='map']").classList.add("is-flying");
+  document.querySelector("[data-action='enter-tower']").disabled = true;
+  const previousGif = document.querySelector("[data-map-flight-gif]");
+  const gif = previousGif.cloneNode();
+  previousGif.replaceWith(gif);
+  gif.hidden = false;
+  document.querySelector("[data-map-flight-status]").hidden = false;
+  state.mapFlightTimer = setTimeout(() => {
+    if (state.screen === "map") showScreen("explore");
+    resetMapFlight();
+  }, 2800);
 }
 
 function selectCharacter(id) {
@@ -99,6 +132,10 @@ function openStory(anchor) {
   ack.hidden = state.explored.has(anchor);
   ack.textContent = `记下${anchor === "jade_flute" ? "玉笛" : "黄鹤"}这一景`;
   updateExploreUI();
+  if (anchor === "jade_flute") {
+    const dialog = document.querySelector("[data-flute-dialog]");
+    if (!dialog.open) dialog.showModal();
+  }
 }
 
 function acknowledgeAnchor() {
@@ -333,6 +370,7 @@ async function downloadCard() {
 
 function resetJourney() {
   clearTimeout(state.transitionTimer);
+  resetMapFlight();
   state.activeAnchorId = null;
   state.explored.clear();
   state.keywords = [];
@@ -370,7 +408,8 @@ document.addEventListener("click", async (event) => {
   if (action === "choose-libai" && state.selectedCharacterId === "libai") showScreen("flight");
   if (action === "back-select") showScreen("select");
   if (action === "arrive-map") showScreen("map");
-  if (action === "enter-tower") showScreen("explore");
+  if (action === "enter-tower") beginMapFlight();
+  if (action === "close-flute") document.querySelector("[data-flute-dialog]").close();
   if (action === "ack-anchor") acknowledgeAnchor();
   if (action === "start-poem") showScreen("poem");
   if (action === "back-explore") showScreen("explore");

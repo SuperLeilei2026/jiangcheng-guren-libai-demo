@@ -48,8 +48,8 @@
             <img src="./assets/boya-ziqi-card.png" alt="" />
             <span class="card-caption"><span>伯牙与钟子期 <small>古琴台 · 琴舟</small></span><strong>筹备中</strong></span>
           </button>
-          <button class="character-card character-card--selectable character-card--missing-art" type="button" data-character="zhangzhidong" aria-pressed="false">
-            <span class="placeholder-mark">工</span>
+          <button class="character-card character-card--selectable" type="button" data-character="zhangzhidong" aria-pressed="false">
+            <img src="./assets/zhangzhidong-card.png" alt="" />
             <span class="card-caption"><span>张之洞 <small>汉阳工业 · 蒸汽火车</small></span><strong>筹备中</strong></span>
           </button>
         </div>
@@ -60,17 +60,16 @@
       </section>
 
       <section class="screen cinematic-screen" data-screen="flight" aria-labelledby="flight-title" hidden>
-        <div class="cinematic-backdrop" aria-hidden="true"></div>
-        <div class="cinematic-vignette" aria-hidden="true"></div>
         <button class="text-button text-button--light back-button" type="button" data-action="back-select">返回选卡</button>
-        <div class="cinematic-copy">
-          <p class="eyebrow eyebrow--light">第二章 · 乘风御笔</p>
-          <h2 id="flight-title">一笔横江，飞渡江城</h2>
-          <blockquote>“后生，抓紧了！这御笔借江风而行。昔年吾在黄鹤楼送别孟浩然，如今江面上竟有钢铁巨舟，远处又横卧长虹。且随吾登楼，看一看后世江城！”</blockquote>
-          <button class="primary-button primary-button--paper" type="button" data-action="arrive-map">看见黄鹤楼</button>
+        <h2 id="flight-title" class="sr-only">一笔入江城 · 李白篇启幕</h2>
+        <div class="opening-frame">
+          <img class="opening-art" src="./assets/libai-opening.png" alt="江城故人李白篇启幕：乘御笔穿行江城，三程借江风，前往黄鹤楼" />
+          <button class="opening-start" type="button" data-action="arrive-map" aria-label="启程，前往江城地图"></button>
         </div>
-        <img class="flight-brush" src="./assets/brush-vehicle.png" alt="幻想载具御笔" />
-        <div class="flight-meter" aria-label="飞行进度"><span></span></div>
+        <details class="opening-dialogue">
+          <summary>听李白说</summary>
+          <blockquote>“后生，抓紧了！这御笔借江风而行。昔年吾在黄鹤楼送别孟浩然，如今江面上竟有钢铁巨舟，远处又横卧长虹。且随吾登楼，看一看后世江城！”</blockquote>
+        </details>
       </section>
 
       <section class="screen map-screen" data-screen="map" aria-labelledby="map-title" hidden>
@@ -86,6 +85,8 @@
           <span class="map-pin-label">抵达 · 黄鹤楼</span>
         </button>
         <div class="map-route" aria-hidden="true"><span></span></div>
+        <img class="map-flight-gif" data-map-flight-gif src="./assets/brush-flight.gif" alt="李白乘御笔飞向黄鹤楼" hidden />
+        <p class="map-flight-status" data-map-flight-status aria-live="polite" hidden>御笔正飞向黄鹤楼……</p>
       </section>
 
       <section class="screen explore-screen" data-screen="explore" aria-labelledby="explore-title" hidden>
@@ -127,6 +128,11 @@
           <button class="primary-button story-ack" type="button" data-action="ack-anchor" hidden>记下这一景</button>
           <button class="primary-button story-next" type="button" data-action="start-poem" hidden>进入下一剧情 · 一起题诗</button>
         </aside>
+        <dialog class="flute-dialog" data-flute-dialog aria-label="玉笛诗境动效">
+          <button class="flute-dialog-close" type="button" data-action="close-flute" aria-label="关闭玉笛动效">×</button>
+          <img src="./assets/jade-flute.gif" alt="玉笛置于案上，梅花飘落的动画" />
+          <p>玉笛 · 听笛怀远</p>
+        </dialog>
       </section>
 
       <section class="screen poem-screen" data-screen="poem" aria-labelledby="poem-title" hidden>

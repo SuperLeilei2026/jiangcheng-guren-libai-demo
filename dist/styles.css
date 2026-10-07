@@ -15,6 +15,7 @@
 html, body { margin: 0; min-height: 100%; background: #0b2429; }
 button { font: inherit; }
 body { min-width: 320px; color: var(--ink); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .game-shell { min-height: 100svh; overflow: hidden; }
 .screen { min-height: 100svh; position: relative; padding: clamp(28px, 5vw, 72px); }
@@ -43,9 +44,9 @@ body { min-width: 320px; color: var(--ink); }
   background: radial-gradient(circle, rgba(117, 213, 210, 0.45), transparent 62%);
   filter: blur(18px);
 }
-.intro-copy { width: min(500px, 90vw); margin-left: clamp(0px, 5vw, 88px); }
+.intro-copy { width: min(900px, 90vw); margin-left: clamp(0px, 5vw, 88px); }
 .eyebrow { margin: 0 0 10px; color: var(--cinnabar); font: 700 0.82rem/1.2 system-ui, sans-serif; letter-spacing: 0.28em; text-transform: uppercase; }
-h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-height: 0.98; letter-spacing: -0.07em; }
+h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.06em; white-space: nowrap; }
 .intro-lead { margin: 26px 0 34px; font-size: clamp(1.08rem, 2.2vw, 1.45rem); letter-spacing: 0.08em; }
 .experience-note { margin: 18px 0 0; color: var(--ink-soft); font: .78rem/1.5 system-ui, sans-serif; }
 
@@ -76,33 +77,31 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
 .screen-header { max-width: 720px; margin: 0 auto 34px; text-align: center; }
 .screen-header h2 { margin: 0 0 12px; font-size: clamp(2.3rem, 5vw, 4.5rem); font-weight: 600; }
 .screen-header p:last-child { margin: 0; font-family: system-ui, sans-serif; color: var(--ink-soft); font-size: 1rem; }
-.character-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; width: min(1320px, 100%); margin: 0 auto; align-items: stretch; }
-.character-card { position: relative; min-height: 380px; overflow: hidden; padding: 0; text-align: left; cursor: pointer; border: 2px solid rgba(16, 47, 53, 0.18); border-radius: 28px 6px 28px 6px; background: rgba(250, 246, 234, 0.72); box-shadow: 0 14px 40px rgba(7, 24, 27, .17); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.character-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: min(1320px, 100%); margin: 0 auto; align-items: stretch; }
+.character-card { position: relative; min-width: 0; min-height: 0; overflow: hidden; padding: 0; text-align: left; cursor: pointer; border: 2px solid rgba(16, 47, 53, 0.18); border-radius: 28px 6px 28px 6px; background: rgba(250, 246, 234, 0.72); box-shadow: 0 14px 40px rgba(7, 24, 27, .17); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; display: flex; flex-direction: column; }
 .character-card:hover, .character-card.is-selected { transform: translateY(-5px); border-color: var(--cinnabar); box-shadow: var(--shadow); }
 .character-card:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
-.character-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.card-caption { position: absolute; inset: auto 0 0; display: flex; align-items: end; justify-content: space-between; gap: 8px; min-height: 108px; padding: 18px; color: #fff; background: linear-gradient(transparent, rgba(7, 28, 33, 0.96)); }
-.card-caption span { font-size: 1.35rem; font-weight: 700; }
-.card-caption small { display: block; margin-top: 6px; color: #bde9e5; font: 600 .68rem/1.3 system-ui, sans-serif; }
+.character-card img { width: 100%; height: clamp(280px, 51vh, 500px); object-fit: contain; object-position: center; display: block; background: rgba(255,250,238,.56); }
+.card-caption { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 78px; margin-top: auto; padding: 12px 14px; color: #fff; background: #17383b; }
+.card-caption span { font-size: clamp(.95rem, 1.5vw, 1.25rem); font-weight: 700; }
+.card-caption small { display: block; margin-top: 5px; color: #bde9e5; font: 600 .75rem/1.3 system-ui, sans-serif; }
 .card-caption strong { flex: 0 0 auto; padding: 6px 8px; border-radius: 999px; color: #fff; background: var(--cinnabar); font: 700 .68rem/1 system-ui, sans-serif; }
-.character-card--missing-art { display: grid; place-items: center; background: radial-gradient(circle at 50% 32%, rgba(117,213,210,.28), transparent 34%), repeating-linear-gradient(135deg, #e9dfc9 0 20px, #e4d9c0 20px 21px); }
-.placeholder-mark { width: 82px; height: 82px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 2rem; }
 .character-detail { display: flex; align-items: center; justify-content: space-between; gap: 20px; width: min(1320px, 100%); min-height: 125px; margin: 20px auto 0; padding: 16px 24px; border: 1px solid rgba(16,47,53,.2); border-radius: 18px 4px 18px 4px; background: rgba(255,250,238,.72); }
 .character-detail h3 { margin: 0 0 5px; font-size: 1.55rem; }
 .character-detail p:last-child { margin: 0; color: var(--ink-soft); font: .88rem/1.55 system-ui, sans-serif; }
 
-/* 御笔飞行 */
-.cinematic-screen { display: grid; align-items: end; min-height: 100svh; color: #fff7e6; padding-bottom: clamp(58px, 10vh, 112px); isolation: isolate; background: #071b20; }
-.cinematic-backdrop { position: absolute; inset: 0; z-index: -3; background: url("./assets/brush-flight.gif") 58% center/cover no-repeat; }
-.cinematic-vignette { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, rgba(4, 18, 22, 0.94) 0%, rgba(4, 18, 22, 0.45) 47%, rgba(4, 18, 22, 0.06) 72%), linear-gradient(0deg, rgba(4, 18, 22, 0.85), transparent 55%); }
-.cinematic-copy { width: min(680px, 92vw); margin-left: clamp(0px, 6vw, 100px); }
+/* 李白篇启幕 */
+.cinematic-screen { display: grid; place-items: center; min-height: 100svh; padding: 0; color: #fff7e6; background: #071b20; }
+.opening-frame { position: relative; width: min(100vw, calc(100svh * 1672 / 941)); aspect-ratio: 1672 / 941; }
+.opening-art { display: block; width: 100%; height: 100%; object-fit: contain; }
+.opening-start { position: absolute; left: 45%; top: 84%; width: 26%; height: 12%; border: 0; border-radius: 999px; background: transparent; cursor: pointer; }
+.opening-start:hover { background: rgba(255,241,191,.1); }
+.opening-start:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.cinematic-screen .back-button { top: auto; bottom: 18px; left: 24px; z-index: 4; padding: 8px 12px; border: 1px solid rgba(255,255,255,.5); border-radius: 99px; background: rgba(4,18,22,.78); }
+.opening-dialogue { position: absolute; z-index: 4; top: 14px; right: 18px; max-width: min(360px, 45vw); padding: 9px 13px; border: 1px solid rgba(255,241,191,.6); border-radius: 12px; color: #fff7e6; background: rgba(4,18,22,.82); font: .88rem/1.5 system-ui, sans-serif; }
+.opening-dialogue summary { cursor: pointer; font-weight: 700; }
+.opening-dialogue blockquote { margin: 10px 0 2px; font: 1rem/1.6 "Songti SC", serif; }
 .eyebrow--light { color: #90e7e2; }
-.cinematic-copy h2 { margin: 0; font-size: clamp(3rem, 7vw, 6.4rem); line-height: 1.03; font-weight: 600; letter-spacing: -0.04em; }
-.cinematic-copy blockquote { margin: 26px 0 34px; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.9; text-wrap: balance; }
-.flight-brush { position: absolute; z-index: -1; right: 3%; top: 13%; width: min(48vw, 650px); max-height: 74vh; object-fit: contain; filter: drop-shadow(0 25px 30px rgba(0,0,0,.32)); transform: rotate(-12deg); }
-.flight-meter { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,.18); overflow: hidden; }
-.flight-meter span { display: block; width: 45%; height: 100%; background: linear-gradient(90deg, transparent, var(--cyan), #fff); animation: flight-progress 4.2s ease-in-out infinite; }
-@keyframes flight-progress { from { transform: translateX(-110%); } to { transform: translateX(330%); } }
 
 /* 地图抵达 */
 .map-screen { display: grid; place-items: center; padding: 0; overflow: hidden; color: #f9f1dc; background: #183238; }
@@ -119,6 +118,11 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
 .map-destination:focus-visible { outline: 3px solid var(--cyan); outline-offset: 9px; border-radius: 50%; }
 .map-route { position: absolute; z-index: 3; left: 44%; top: 67%; width: 17%; height: 2px; transform: rotate(-18deg); background: repeating-linear-gradient(90deg, rgba(255,255,255,.85) 0 8px, transparent 8px 16px); filter: drop-shadow(0 0 7px #fff); }
 .map-route span { position: absolute; right: -4px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #fff; }
+.map-screen.is-flying .map-destination { visibility: hidden; }
+.map-flight-gif { position: absolute; z-index: 5; left: 38%; top: 26%; width: min(50vw, 620px); height: auto; object-fit: contain; filter: drop-shadow(0 18px 18px rgba(0,0,0,.38)); animation: map-flight-in 2.7s ease-in-out both; pointer-events: none; }
+.map-flight-gif[hidden], .map-flight-status[hidden] { display: none; }
+.map-flight-status { position: absolute; z-index: 6; left: 50%; bottom: 7%; transform: translateX(-50%); min-width: max-content; padding: 10px 18px; border: 1px solid rgba(255,255,255,.6); border-radius: 99px; background: rgba(7,26,30,.84); font: 700 1rem/1.2 system-ui, sans-serif; }
+@keyframes map-flight-in { from { transform: translate(-92vw, 24vh) scale(.58); opacity: .35; } 60% { opacity: 1; } to { transform: translate(0, 0) scale(1); opacity: 1; } }
 
 /* 寻幽场景 */
 .explore-screen { min-height: 100svh; padding: 0; overflow: hidden; color: #fff8e8; background: #102c32; }
@@ -160,6 +164,12 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
 .story-source summary { cursor: pointer; font-weight: 700; }
 .story-source div { margin-top: 6px; }
 .story-ack, .story-next { width: 100%; margin-top: 15px; }
+.flute-dialog { position: fixed; width: min(740px, 88vw); max-width: none; max-height: 88svh; padding: 12px 12px 0; border: 1px solid rgba(255,239,191,.8); border-radius: 22px 5px 22px 5px; color: #fdf3dd; background: #102f35; box-shadow: 0 28px 90px rgba(0,0,0,.55); }
+.flute-dialog:not([open]) { display: none; }
+.flute-dialog::backdrop { background: rgba(5,22,27,.72); backdrop-filter: blur(5px); }
+.flute-dialog img { display: block; width: 100%; height: auto; max-height: 72svh; object-fit: contain; border-radius: 12px 2px 12px 2px; }
+.flute-dialog p { margin: 11px 4px 13px; font-size: 1.1rem; }
+.flute-dialog-close { position: absolute; right: 18px; top: 18px; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.65); border-radius: 50%; color: #fff; background: rgba(4,18,22,.8); cursor: pointer; font: 1.8rem/1 system-ui, sans-serif; }
 
 /* 共题诗 */
 .poem-screen { min-height: 100svh; overflow: hidden; background: #e8dec6; }
@@ -226,8 +236,12 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
 .screen--active { animation: screen-in 420ms ease both; }
 
 @media (max-width: 980px) {
-  .character-grid { grid-template-columns: repeat(2, 1fr); }
-  .character-card { min-height: 410px; }
+  .character-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .character-card img { height: min(42vh, 410px); }
+  .card-caption { padding: 9px; min-height: 72px; }
+  .card-caption span { font-size: .92rem; }
+  .card-caption small { font-size: .66rem; }
+  .card-caption strong { font-size: .58rem; padding: 5px 6px; }
   .poem-layout { grid-template-columns: 1fr; }
   .poet-companion { min-height: 460px; }
   .memory-stage { grid-template-columns: 1fr; }
@@ -239,21 +253,22 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
   .intro-screen { align-items: end; background-position: 64% center; }
   .intro-screen::after { background: linear-gradient(0deg, rgba(239, 231, 211, 0.98) 0%, rgba(239, 231, 211, 0.55) 50%, rgba(239, 231, 211, 0.05) 78%); }
   .intro-copy { margin: 0 0 8vh; }
-  h1 { font-size: clamp(4rem, 22vw, 7rem); }
+  h1 { font-size: clamp(3.1rem, 12.5vw, 6rem); }
   .character-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-  .character-card { min-height: 255px; }
-  .card-caption { align-items: center; padding: 18px; }
-  .card-caption span { font-size: 1rem; }
+  .character-card img { height: min(44vh, 340px); }
+  .card-caption { align-items: center; padding: 10px; }
+  .card-caption span { font-size: .96rem; }
   .card-caption strong { font-size: .58rem; }
   .character-detail { align-items: start; flex-direction: column; }
-  .cinematic-screen { align-items: end; }
-  .cinematic-backdrop { background-position: 66% center; }
-  .cinematic-vignette { background: linear-gradient(0deg, rgba(4,18,22,.98) 0%, rgba(4,18,22,.48) 62%, rgba(4,18,22,.1)); }
-  .cinematic-copy { margin: 0 0 5vh; }
-  .flight-brush { right: -16%; top: 10%; width: 90vw; opacity: .58; }
+  .cinematic-screen { padding: 0; }
+  .cinematic-screen .back-button { bottom: 12px; left: 12px; }
+  .opening-dialogue { top: auto; bottom: 54px; right: 12px; max-width: 68vw; font-size: .72rem; }
+  .opening-dialogue blockquote { font-size: .82rem; }
   .map-art { object-position: 60% center; }
   .map-destination { left: 57%; top: 61%; }
   .map-route { display: none; }
+  .map-flight-gif { left: 13%; top: 34%; width: 76vw; }
+  .map-flight-status { bottom: 18%; }
   .explore-hud { padding: 22px 18px; }
   .explore-hud > div:first-child { max-width: 58%; }
   .explore-hud h2 { font-size: 1.75rem; }
@@ -265,6 +280,7 @@ h1 { margin: 0; font-size: clamp(4.5rem, 11vw, 9.5rem); font-weight: 600; line-h
   .hotspot-label { display: none; }
   .anchor-nav { left: 18px; bottom: auto; top: 105px; }
   .story-panel { right: 12px; bottom: 12px; padding: 15px; max-height: 58vh; overflow: auto; }
+  .flute-dialog { width: 94vw; padding: 8px 8px 0; }
   .story-dialogue { font-size: .93rem; line-height: 1.62; }
   .poem-screen { overflow: auto; }
   .poem-layout { margin-top: 50px; }
