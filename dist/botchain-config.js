@@ -11,6 +11,8 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     deploymentTxHash: "0x0ae95f482651cef08636c3d1258bda58aa7e1a920b69e3b2986055c465a0f4a7",
     deploymentBlock: 25866871,
     personaRegistrationTxHash: "0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a",
+    memoryIssueSampleTxHash: "0x04e3582cc38a038a6f4684a6002d74b70ae6b7cf45e954e99c02655ed2fd8e88",
+    memoryIssueSampleBlock: 25921329,
   }),
   persona: Object.freeze({
     packageKey: "jiangcheng-guren:persona:li-bai",

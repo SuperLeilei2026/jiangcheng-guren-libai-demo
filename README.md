@@ -25,10 +25,10 @@
 | 李白人格包 v1 登记交易 | [`0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a`](https://scan.botchain.ai/tx/0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a) |
 | 李白人格包 ID | `0xd0431554c39540f53884fd4442bfd4208ec3b9cb0b7bf0ac9dee68815b6e345e` |
 | 李白人格包哈希 | `0x633d8480babc919399ece09ff63a6a7f79b2dfdc3ff40338dd9bfda5e0fd3399` |
-| 记忆签发交易 | 从终章调用 `issueMemory` 后生成；页面会立即给出交易链接，且仅在交易回执、`MemoryIssued` 事件与 `getMemory` 回读三者一致后提供完整核验 JSON |
+| 记忆签发样例 | [`0x04e3582cc38a038a6f4684a6002d74b70ae6b7cf45e954e99c02655ed2fd8e88`](https://scan.botchain.ai/tx/0x04e3582cc38a038a6f4684a6002d74b70ae6b7cf45e954e99c02655ed2fd8e88)，区块 `25921329`，`status=1` |
 | 机器可读证据 | [`dist/mainnet-evidence.json`](./dist/mainnet-evidence.json) |
 
-2026-10-08 已通过主网 RPC 实时只读回查：`chainId=677`，合约 runtime bytecode hash 为 `0x53101852e26cd46e3b7fdac9a210fdf64b7591661fc6397e4b14adb896be75c8`，owner 为 `0x3963Dd43d4D86749F535c562Ee5a14E723323f66`，李白人格包 v1 的 ID、版本、哈希与 issuer 均与前端固定配置一致；部署与人格包登记交易回执均为 `status=1`。本前端仓库不附带 Solidity 编译产物，因此机器证据不宣称可由本仓库独立复现 bytecode 编译匹配。
+2026-10-08 已通过主网 RPC 实时只读回查：`chainId=677`，合约 runtime bytecode hash 为 `0x53101852e26cd46e3b7fdac9a210fdf64b7591661fc6397e4b14adb896be75c8`，owner 为 `0x3963Dd43d4D86749F535c562Ee5a14E723323f66`，李白人格包 v1 的 ID、版本、哈希与 issuer 均与前端固定配置一致；部署与人格包登记交易回执均为 `status=1`。同日完成一笔真实 `issueMemory` 主网交易，区块浏览器显示成功，前端已核对交易回执、`MemoryIssued` 事件与 `getMemory` 合约回读。本前端仓库不附带 Solidity 编译产物，因此机器证据不宣称可由本仓库独立复现 bytecode 编译匹配。
 
 这里复用的是“李白人格视觉与叙事画像”人格包 v1，再基于它签发本次旅程记忆；不把人格包表述成完整旅程包。合约只保存 `memoryId / packageId / version / payloadHash / issuer / issuedAt`，诗文、留言与随机 nonce 原文不上链。完整 canonical payload 只在用户本地的核验 JSON 中导出，用于重算摘要。
 

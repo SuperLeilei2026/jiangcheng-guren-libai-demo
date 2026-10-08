@@ -1176,8 +1176,10 @@ function initializeChainUI() {
   contractLink.textContent = `${shortHex(CHAIN_CONFIG.registryAddress)} ↗`;
   const deploymentLink = document.querySelector("[data-deployment-tx-link]");
   const personaLink = document.querySelector("[data-persona-tx-link]");
+  const memoryIssueLink = document.querySelector("[data-memory-issue-tx-link]");
   deploymentLink.href = `${CHAIN_CONFIG.explorerUrl}/tx/${CHAIN_CONFIG.evidence.deploymentTxHash}`;
   personaLink.href = `${CHAIN_CONFIG.explorerUrl}/tx/${CHAIN_CONFIG.evidence.personaRegistrationTxHash}`;
+  memoryIssueLink.href = `${CHAIN_CONFIG.explorerUrl}/tx/${CHAIN_CONFIG.evidence.memoryIssueSampleTxHash}`;
   setChainPhase("local", "连接钱包后将依次核验网络、合约代码、人格包与签发权限。", "local");
 }
 
