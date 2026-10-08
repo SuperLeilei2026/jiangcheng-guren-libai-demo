@@ -74,6 +74,17 @@
     },
     "readback": {
       "method": "getMemory(bytes32)",
+      "blockTag": "latest after confirmed block 25921329",
+      "argument": "0xd49ce879e3d13fda0c9b21993f107b3752c7baeb6ccb3e3bef8bca0e129a9ab7",
+      "returned": {
+        "memoryId": "0xd49ce879e3d13fda0c9b21993f107b3752c7baeb6ccb3e3bef8bca0e129a9ab7",
+        "packageId": "0xd0431554c39540f53884fd4442bfd4208ec3b9cb0b7bf0ac9dee68815b6e345e",
+        "version": 1,
+        "payloadHash": "0x9c8728cfd8ef31b874b519b22fea1fd96ac6a910ab9a68ffb3882530881c4a86",
+        "issuer": "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
+        "issuedAt": 1791425407,
+        "issuedAtIso": "2026-10-08T02:10:07Z"
+      },
       "fieldsMatchedTransactionAndEvent": true
     }
   },
