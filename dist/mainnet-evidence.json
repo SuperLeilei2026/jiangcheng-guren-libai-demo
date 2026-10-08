@@ -1,0 +1,49 @@
+{
+  "schema": "jiangcheng-guren/botchain-mainnet-evidence/v1",
+  "verifiedAt": "2026-10-08T01:42:47Z",
+  "network": {
+    "name": "BOT Chain Mainnet",
+    "chainId": 677,
+    "rpcUrl": "https://rpc.botchain.ai",
+    "explorerUrl": "https://scan.botchain.ai"
+  },
+  "registry": {
+    "address": "0x8DC9E18D2492F19aafa0B96B5bC5f9cd41b45493",
+    "owner": "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
+    "runtimeBytecodeHash": "0x53101852e26cd46e3b7fdac9a210fdf64b7591661fc6397e4b14adb896be75c8",
+    "explorerUrl": "https://scan.botchain.ai/address/0x8DC9E18D2492F19aafa0B96B5bC5f9cd41b45493",
+    "deployment": {
+      "transactionHash": "0x0ae95f482651cef08636c3d1258bda58aa7e1a920b69e3b2986055c465a0f4a7",
+      "blockNumber": 25866871,
+      "status": 1,
+      "explorerUrl": "https://scan.botchain.ai/tx/0x0ae95f482651cef08636c3d1258bda58aa7e1a920b69e3b2986055c465a0f4a7"
+    }
+  },
+  "liBaiPersonaV1": {
+    "packageKey": "jiangcheng-guren:persona:li-bai",
+    "packageId": "0xd0431554c39540f53884fd4442bfd4208ec3b9cb0b7bf0ac9dee68815b6e345e",
+    "version": 1,
+    "packageHash": "0x633d8480babc919399ece09ff63a6a7f79b2dfdc3ff40338dd9bfda5e0fd3399",
+    "issuer": "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
+    "registration": {
+      "transactionHash": "0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a",
+      "blockNumber": 25866897,
+      "status": 1,
+      "explorerUrl": "https://scan.botchain.ai/tx/0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a"
+    }
+  },
+  "memoryIssue": null,
+  "verification": {
+    "rpcChainIdIs677": true,
+    "rpcRegistryCodePresent": true,
+    "rpcRuntimeHashMatchesConfiguredHash": true,
+    "rpcOwnerMatchesConfiguredOwner": true,
+    "rpcPersonaRecordMatchesConfiguredValues": true,
+    "explorerDeploymentReceiptStatusIs1": true,
+    "explorerPersonaReceiptStatusIs1": true
+  },
+  "limitations": [
+    "This frontend repository does not bundle the Solidity compiler artifact, so this JSON does not claim an independently reproducible local-bytecode match.",
+    "memoryIssue remains null until a real end-of-journey issueMemory transaction is confirmed and read back."
+  ]
+}
