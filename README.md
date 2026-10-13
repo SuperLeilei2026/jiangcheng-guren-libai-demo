@@ -1,6 +1,6 @@
 # 江城故人 · 李白篇 / 伯牙子期篇 Demo
 
-一个使用项目现有角色卡与水墨场景素材制作的单页互动叙事 Demo。目前开放两条路线：**李白篇**（黄鹤楼诗旅）与**伯牙子期篇**（高山流水）；屈原、张之洞保留静态预览入口。两条已开放路线都接入独立的“链上共创谱系”页面，让普通参与者用自己的 EVM 钱包发布、回应和回读关系。
+一个使用项目现有角色卡与水墨场景素材制作的单页互动叙事 Demo。目前开放两条路线：**李白篇**（黄鹤楼诗旅）与**伯牙子期篇**（高山流水）。两条路线都接入独立的“链上共创谱系”页面，让普通参与者用自己的 EVM 钱包发布、回应和回读关系。
 
 ## 伯牙子期篇（高山流水）
 
@@ -26,17 +26,15 @@
 
 ### 关于人格包与链上封存
 
-伯牙人格包 `packageId` 按与李白篇相同的规则由 `packageKey` 经 keccak256 推导（`0xce4857d2…ae085`），但**尚未在主网登记**。因此前端会：
+伯牙路线使用合约工程中已经冻结并通过原始文件哈希校验的“高山流水”人格包；其 `packageId` 按与李白篇相同的规则由 `packageKey` 经 keccak256 推导（`0x0e8dea51…35053c`），并已在 BOT Chain Mainnet 登记。因此前端会：
 
-- 如实显示"伯牙人格包 v1 · 主网未登记"，不谎称已登记
-- 在封存前调用 `packageExists` 核验，未登记时直接停止并说明原因，不发送交易
+- 在写入前调用 `packageExists` 与 `getPackage` 回读，核对版本、哈希和 issuer，而不是只相信前端配置
+- 登记证据指向交易 [`0xcca61f…2967f`](https://scan.botchain.ai/tx/0xcca61f431e18126f70c90e684ce8c617258e8586d75cef994a479e367cd2967f)，区块 `25866913`，`status=1`
 - 本地配方 JSON、音律 WAV 与内容摘要在任何情况下均可正常生成与下载
-
-若需真实上链，先用项目 owner 钱包将伯牙人格包注册到主网，再将 `botchain-config.js` 中 `personaBoya.registeredOnMainnet` 置为 `true` 并补齐 `packageHash`/`issuer`。
 
 ## 李白篇已实现流程
 
-1. 江城开场与四人选卡；点击李白卡片直接进入李白篇启幕
+1. 江城开场与李白、伯牙子期双路线选卡；点击李白卡片直接进入李白篇启幕
 2. 李白篇启幕图与“启程”交互，保留可展开的李白引导对白
 3. 江城地图点击“抵达 · 黄鹤楼”后叠加透明御笔飞行 GIF，动效结束进入黄鹤楼眺望视角
 4. 全程循环播放背景音乐，可用右上角音乐按钮静音或恢复
@@ -59,7 +57,7 @@
 
 共创合约是 **permissionless-user-writes with registered package root**：没有 owner 或 issuer 白名单，但会在合约层校验人格包来源、异钱包回应、作品类型、评分范围和认定权属。诗句、曲名与短评是公开合约数据；音乐配方仅上链 Hash。下联和知音评价都由合约索引并通过 getter 回读，不依赖 `eth_getLogs`。链上记录只证明使用了哪个人格包版本、钱包行为与时序，不自动证明现实身份、原创权属或评价质量。
 
-Solidity 源码与边界说明见 [`contracts/JiangchengCoCreationRegistry.sol`](./contracts/JiangchengCoCreationRegistry.sol) 和 [`contracts/README.md`](./contracts/README.md)。**当前代码阶段不写假地址或假交易**：共创合约主网部署完成前，`coCreationRegistry.address` 保持为空，页面会明确显示等待部署并禁止发起交易。
+Solidity 源码与边界说明见 [`contracts/JiangchengCoCreationRegistry.sol`](./contracts/JiangchengCoCreationRegistry.sol) 和 [`contracts/README.md`](./contracts/README.md)。共创合约已部署到 BOT Chain Mainnet；前端连接后还会核验地址上的 runtime code、代码哈希与不可变绑定的 `sourceRegistry`，任一不匹配都会停止写入，不模拟成功。
 
 ## BOT Chain Mainnet 核验材料
 
@@ -71,10 +69,14 @@ Solidity 源码与边界说明见 [`contracts/JiangchengCoCreationRegistry.sol`]
 | 李白人格包 v1 登记交易 | [`0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a`](https://scan.botchain.ai/tx/0x427481d49ae641c8e4dfac922188d007305ada2dafa4f0a65c61394809c70d5a) |
 | 李白人格包 ID | `0xd0431554c39540f53884fd4442bfd4208ec3b9cb0b7bf0ac9dee68815b6e345e` |
 | 李白人格包哈希 | `0x633d8480babc919399ece09ff63a6a7f79b2dfdc3ff40338dd9bfda5e0fd3399` |
+| 高山流水人格包 v1 登记交易 | [`0xcca61f431e18126f70c90e684ce8c617258e8586d75cef994a479e367cd2967f`](https://scan.botchain.ai/tx/0xcca61f431e18126f70c90e684ce8c617258e8586d75cef994a479e367cd2967f)，区块 `25866913`，`status=1` |
+| 高山流水人格包 ID | `0x0e8dea51bcb23e35f71f640b17d49d39a896f8d83e592482a2e70bdf5c35053c` |
+| 用户共创合约 | [`0xac364Ef166138B225a00F257B4A66F87999453E1`](https://scan.botchain.ai/address/0xac364Ef166138B225a00F257B4A66F87999453E1) |
+| 用户共创合约部署交易 | [`0x180005cdd0592064e9db5cd648d4ac9afb5b89c3613ca091315d17a34a29b719`](https://scan.botchain.ai/tx/0x180005cdd0592064e9db5cd648d4ac9afb5b89c3613ca091315d17a34a29b719)，区块 `26558421`，`status=1` |
 | 记忆签发样例 | [`0x04e3582cc38a038a6f4684a6002d74b70ae6b7cf45e954e99c02655ed2fd8e88`](https://scan.botchain.ai/tx/0x04e3582cc38a038a6f4684a6002d74b70ae6b7cf45e954e99c02655ed2fd8e88)，区块 `25921329`，`status=1` |
 | 机器可读证据 | [`dist/mainnet-evidence.json`](./dist/mainnet-evidence.json) |
 
-2026-10-08 已通过主网 RPC 实时只读回查：`chainId=677`，合约 runtime bytecode hash 为 `0x53101852e26cd46e3b7fdac9a210fdf64b7591661fc6397e4b14adb896be75c8`，owner 为 `0x3963Dd43d4D86749F535c562Ee5a14E723323f66`，李白人格包 v1 的 ID、版本、哈希与 issuer 均与前端固定配置一致；部署与人格包登记交易回执均为 `status=1`。同日完成一笔真实 `issueMemory` 主网交易，区块浏览器显示成功，前端已核对交易回执、`MemoryIssued` 事件与 `getMemory` 合约回读。本前端仓库不附带 Solidity 编译产物，因此机器证据不宣称可由本仓库独立复现 bytecode 编译匹配。
+2026-10-13 再次通过主网 RPC 实时回查：`chainId=677`；来源注册簿、李白与高山流水人格包记录均与配置一致；共创合约地址存在 runtime code，代码哈希为 `0x52307ac0085b8b14ba4ffcaf76559bbdfb2d187602be153a849b731d30850676`，且 `sourceRegistry()` 回读为既有注册簿。部署交易回执 `status=1`，实际消耗 `0.0322318 BOT`。此前的 `issueMemory` 样例也已核对交易回执、`MemoryIssued` 事件与 `getMemory` 合约回读。本前端仓库不附带 Solidity 编译产物，因此机器证据不宣称可由本仓库独立复现 bytecode 编译匹配。
 
 这里复用的是“李白人格视觉与叙事画像”人格包 v1，再基于它签发本次旅程记忆；不把人格包表述成完整旅程包。合约只保存 `memoryId / packageId / version / payloadHash / issuer / issuedAt`，诗文、留言与随机 nonce 原文不上链。完整 canonical payload 只在用户本地的核验 JSON 中导出，用于重算摘要。
 
