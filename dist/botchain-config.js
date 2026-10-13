@@ -43,6 +43,7 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     abi: Object.freeze([
       "function workExists(bytes32 workId) view returns (bool)",
       "function attestationExists(bytes32 attestationId) view returns (bool)",
+      "function hasReviewedMusic(bytes32 workId, address reviewer) view returns (bool)",
       "function getWork(bytes32 workId) view returns (tuple(bytes32 workId, bytes32 parentId, bytes32 contentHash, address creator, uint64 createdAt, uint8 kind, string displayText))",
       "function getAttestation(bytes32 attestationId) view returns (tuple(bytes32 attestationId, bytes32 workId, bytes32 assessmentHash, address reviewer, uint64 createdAt, uint8 interpretation, uint8 resonance, uint8 rhythm, uint8 imagery, bool recognized, string comment))",
       "function responseCount(bytes32 parentId) view returns (uint256)",
@@ -64,6 +65,7 @@ window.BOTCHAIN_CONFIG = Object.freeze({
       "error SelfAttestationNotAllowed()",
       "error NotWorkCreator(address caller, address creator)",
       "error AttestationAlreadyRecognized(bytes32 attestationId)",
+      "error DuplicateMusicReview(bytes32 workId, address reviewer)",
     ]),
   }),
   registryAbi: Object.freeze([

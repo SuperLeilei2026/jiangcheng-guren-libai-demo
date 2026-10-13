@@ -56,6 +56,7 @@ contract JiangchengCoCreationRegistry {
     mapping(bytes32 => AttestationRecord) private attestations;
     mapping(bytes32 => bytes32[]) private responseIds;
     mapping(bytes32 => bytes32[]) private attestationIds;
+    mapping(bytes32 => mapping(address => bool)) private musicReviewedBy;
 
     error ZeroIdentifier();
     error WorkAlreadyExists(bytes32 workId);
@@ -72,6 +73,7 @@ contract JiangchengCoCreationRegistry {
     error InvalidScore(uint8 value);
     error NotWorkCreator(address caller, address creator);
     error AttestationAlreadyRecognized(bytes32 attestationId);
+    error DuplicateMusicReview(bytes32 workId, address reviewer);
     error PageTooLarge(uint256 requested, uint256 maximum);
 
     event WorkPublished(
@@ -170,6 +172,9 @@ contract JiangchengCoCreationRegistry {
         WorkRecord memory work = _getWork(workId);
         if (work.kind != WorkKind.Music) revert InvalidWorkKind(work.kind);
         if (work.creator == msg.sender) revert SelfAttestationNotAllowed();
+        if (musicReviewedBy[workId][msg.sender]) {
+            revert DuplicateMusicReview(workId, msg.sender);
+        }
         if (interpretation == Interpretation.None) {
             revert InvalidInterpretation(uint8(interpretation));
         }
@@ -202,6 +207,7 @@ contract JiangchengCoCreationRegistry {
             recognized: false,
             comment: comment
         });
+        musicReviewedBy[workId][msg.sender] = true;
         attestationIds[workId].push(attestationId);
 
         emit MusicAttested(
@@ -247,6 +253,13 @@ contract JiangchengCoCreationRegistry {
         bytes32 attestationId
     ) external view returns (bool) {
         return attestations[attestationId].attestationId != bytes32(0);
+    }
+
+    function hasReviewedMusic(
+        bytes32 workId,
+        address reviewer
+    ) external view returns (bool) {
+        return musicReviewedBy[workId][reviewer];
     }
 
     function getWork(

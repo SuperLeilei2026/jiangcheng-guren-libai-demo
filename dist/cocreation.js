@@ -25,6 +25,7 @@
     poemParent: null,
     musicWorkId: "",
     musicWork: null,
+    musicReviewBlock: "",
     recipeJson: "",
     recipe: null,
     shareUrl: "",
@@ -147,6 +148,7 @@
     if (message.includes("selfattestationnotallowed")) return "曲目发布者不能使用同一钱包给自己做知音评价。";
     if (custom === "SelfResponseNotAllowed") return "上联发起人不能使用同一钱包自己对下联。";
     if (custom === "SelfAttestationNotAllowed") return "曲目发布者不能使用同一钱包给自己做知音评价。";
+    if (custom === "DuplicateMusicReview") return "同一钱包对这首曲只能提交一次知音评价。";
     if (custom === "NotWorkCreator") return "只有这首曲的发布钱包可以认定知音。";
     if (custom === "AttestationAlreadyRecognized") return "这条知音评价已被认定。";
     if (custom === "WorkAlreadyExists" || custom === "AttestationAlreadyExists") {
@@ -270,11 +272,19 @@
     await verifyConfiguredContract(browserProvider);
     state.writeContract = new ethersLib.Contract(coConfig.address, coConfig.abi, signer);
     setStatus(`已连接 ${shortHex(account)}，网络与合约校验通过。`);
-    if (state.musicWorkId) await loadMusicWork(state.musicWorkId, { quiet: true });
+    if (state.musicWorkId) {
+      await loadMusicWork(state.musicWorkId, { quiet: true });
+      if (state.musicReviewBlock === "creator") {
+        setStatus("已连接曲目创作钱包；请切换另一钱包做知音评价。", "pending");
+      } else if (state.musicReviewBlock === "reviewed") {
+        setStatus("这个钱包已提交过一次知音评价，不能重复提交。", "pending");
+      }
+    }
     return state;
   }
 
   async function ensureWriteContract() {
+    if (!configuredAddress()) throw new Error("Co-creation contract not deployed or not configured");
     if (!state.account || !state.writeContract) await connectWallet();
     if (!state.writeContract) throw new Error("Co-creation contract not deployed or not configured");
     const network = await state.browserProvider.getNetwork();
@@ -546,7 +556,10 @@
       state.recipeJson = verified ? recipeJson : "";
       state.recipe = verified ? recipe : null;
       renderRecipeSummary(recipe, verified);
-      setFormEnabled($("[data-form='attest-music']"), verified);
+      const isCreator = Boolean(state.account && work.creator.toLowerCase() === state.account.toLowerCase());
+      const alreadyReviewed = Boolean(state.account && await contract.hasReviewedMusic(workId, state.account));
+      state.musicReviewBlock = isCreator ? "creator" : alreadyReviewed ? "reviewed" : "";
+      setFormEnabled($("[data-form='attest-music']"), verified && !state.musicReviewBlock);
       $("[data-action='preview-music']").disabled = !verified;
       await renderAttestations(contract, workId);
       if (!options.quiet) {
