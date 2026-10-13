@@ -10,35 +10,55 @@
   </head>
   <body>
     <header class="co-topbar">
-      <a href="./index.html" class="co-back">← 返回江城故人</a>
+      <a href="./index.html" class="co-back">
+        <span class="co-back-seal" aria-hidden="true">江</span>
+        <span><strong>江城故人</strong><small>返回原旅程</small></span>
+      </a>
       <div class="co-network"><i></i> BOT Chain Mainnet · 677</div>
       <button type="button" class="co-wallet-button" data-action="connect-wallet">连接 MetaMask / OKX</button>
     </header>
 
     <main class="co-shell">
       <section class="co-hero">
-        <p class="co-eyebrow">JIANGCHENG CO-CREATION GRAPH</p>
-        <h1>把唱和与知音，写成一条可验证的关系</h1>
-        <p>沿用原旅程的人格包作为可信底稿，再由每位参与者用自己的钱包发布、回应与认定。BOT Chain 同时固定作品从哪里来，以及后来由谁共同写成。</p>
+        <div class="co-hero-copy">
+          <p class="co-eyebrow">江城故人 · 共创续章</p>
+          <h1>把唱和与知音，<br />续进同一幅江城长卷</h1>
+          <p>先与故人完成原来的水墨旅程，再用自己的钱包为诗句或曲目落款。朋友接下一句、听懂一曲，彼此的创作关系便由 BOT Chain 留下可核验的谱系。</p>
+
+          <div class="co-journey-bridge" aria-label="从原旅程到链上共创的四个步骤">
+            <span><b>一</b><em>同游江城</em><small>生成诗或曲</small></span>
+            <i aria-hidden="true"></i>
+            <span><b>二</b><em>钱包落款</em><small>本人签名发布</small></span>
+            <i aria-hidden="true"></i>
+            <span><b>三</b><em>邀友回应</em><small>续句或解音</small></span>
+            <i aria-hidden="true"></i>
+            <span><b>四</b><em>共创成谱</em><small>关系链上留存</small></span>
+          </div>
+        </div>
+
         <dl class="co-wallet-facts">
-          <div><dt>当前钱包</dt><dd data-wallet-address>尚未连接</dd></div>
-          <div><dt>共创合约</dt><dd><a data-contract-link href="#">等待部署配置</a></dd></div>
-          <div><dt>人格包注册簿</dt><dd><a data-source-registry-link href="#">加载配置中…</a></dd></div>
-          <div><dt>写入权限</dt><dd>任意 EVM 钱包</dd></div>
+          <div><dt>我的落款</dt><dd data-wallet-address>尚未连接</dd></div>
+          <div><dt>共创谱系合约</dt><dd><a data-contract-link href="#">等待部署配置</a></dd></div>
+          <div><dt>原旅程注册簿</dt><dd><a data-source-registry-link href="#">加载配置中…</a></dd></div>
+          <div><dt>谁可以参与</dt><dd>任意 EVM 钱包</dd></div>
         </dl>
         <p class="co-status" data-status role="status" aria-live="polite">连接钱包后可切换至 BOT Chain Mainnet，并由你本人确认交易。</p>
       </section>
 
+      <p class="co-section-kicker">选择要续写的旅程</p>
       <nav class="co-tabs" aria-label="选择共创路线">
-        <button type="button" data-route-tab="poem" aria-selected="true">李白 · 诗句唱和</button>
-        <button type="button" data-route-tab="music" aria-selected="false">伯牙子期 · 知音评价</button>
+        <button type="button" data-route-tab="poem" aria-selected="true"><span>李白篇</span><small>邀友续一句</small></button>
+        <button type="button" data-route-tab="music" aria-selected="false"><span>伯牙子期篇</span><small>等一位知音</small></button>
       </nav>
 
       <section class="co-route" data-route-panel="poem">
         <div class="co-route-heading">
-          <p>一人写上联，一人接下联</p>
-          <h2>李白篇 · 链上唱和</h2>
-          <span>上联与下联会形成不可覆盖的父子关系；两位参与者必须使用不同钱包。</span>
+          <div class="co-route-copy">
+            <p>一人写上联，一人接下联</p>
+            <h2>李白篇 · 链上唱和</h2>
+            <span>你从黄鹤楼诗旅带来一句，朋友从分享链接接写下联。两句诗分别由不同钱包落款，并形成不可覆盖的父子关系。</span>
+          </div>
+          <figure class="co-route-portrait" aria-hidden="true"><img src="./assets/libai-poem-card.png" alt="" /></figure>
           <div class="co-origin-card" data-origin-card="poem">
             <small>原旅程来源</small>
             <strong>李白人格包 v1</strong>
@@ -59,6 +79,7 @@
 
           <aside class="co-card co-card--explain">
             <span class="co-card-index">链上发生什么</span>
+            <h3>这一句如何找到下一句</h3>
             <ol>
               <li>你的钱包签名发布上联</li>
               <li>作品引用已登记的李白人格包 v1</li>
@@ -85,9 +106,12 @@
 
       <section class="co-route" data-route-panel="music" hidden>
         <div class="co-route-heading">
-          <p>一人鼓琴，一人解意</p>
-          <h2>伯牙子期篇 · 链上知音</h2>
-          <span>曲目发布者登记配方指纹；另一位用户从意境、共鸣、节奏和画面感提交独立评价。</span>
+          <div class="co-route-copy">
+            <p>一人鼓琴，一人解意</p>
+            <h2>伯牙子期篇 · 链上知音</h2>
+            <span>你从高山流水旅程带来一份音乐配方，朋友聆听后留下独立评价；创作者还可用原钱包认定真正听懂这一曲的人。</span>
+          </div>
+          <figure class="co-route-portrait" aria-hidden="true"><img src="./assets/boya-ziqi-card.png" alt="" /></figure>
           <div class="co-origin-card" data-origin-card="music">
             <small>原旅程来源</small>
             <strong>伯牙子期人格包 v1</strong>
@@ -112,6 +136,7 @@
 
           <aside class="co-card co-card--explain">
             <span class="co-card-index">知音如何成立</span>
+            <h3>这一曲如何等到知音</h3>
             <ol>
               <li>创作者发布配方 Hash</li>
               <li>作品引用已登记的伯牙人格包版本</li>
