@@ -40,4 +40,4 @@
 - Optimizer enabled, `runs = 200`
 - SPDX `MIT`
 
-部署构造参数必须填写现有 `JourneyMemoryRegistry` 地址；部署脚本会先校验该地址的 runtime bytecode。主网部署前，`dist/botchain-config.js` 中的 `coCreationRegistry.address`、runtime hash 和部署区块保持为空。前端会停用交易并显示“等待主网部署”，不会伪造成功状态。
+部署构造参数填写现有 `JourneyMemoryRegistry` 地址，部署脚本会先校验该地址的 runtime bytecode。当前主网共创合约已部署至 `0xac364Ef166138B225a00F257B4A66F87999453E1`，部署交易为 `0x180005cdd0592064e9db5cd648d4ac9afb5b89c3613ca091315d17a34a29b719`；前端会同时校验 Chain ID、合约地址与 runtime bytecode，校验失败时停用交易，不会伪造成功状态。
