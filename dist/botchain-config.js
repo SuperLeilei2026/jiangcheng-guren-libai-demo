@@ -33,7 +33,8 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     registeredOnMainnet: false,
   }),
   // 用户共创合约：与上方“项目授权签发”合约分离。
-  // 这里的写入者是普通参与者钱包，不需要 owner / issuer 权限。
+  // 这里的写入者是普通参与者钱包，不需要 owner / issuer 权限；但每个根作品
+  // 必须引用上方 JourneyMemoryRegistry 已登记的人格包版本，形成可回查的来源谱系。
   // 主网部署完成前保持空地址；前端会明确停用交易，不模拟成功。
   coCreationRegistry: Object.freeze({
     address: "",
@@ -41,21 +42,22 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     deploymentBlock: null,
     deploymentTxHash: "",
     abi: Object.freeze([
+      "function sourceRegistry() view returns (address)",
       "function workExists(bytes32 workId) view returns (bool)",
       "function attestationExists(bytes32 attestationId) view returns (bool)",
       "function hasReviewedMusic(bytes32 workId, address reviewer) view returns (bool)",
-      "function getWork(bytes32 workId) view returns (tuple(bytes32 workId, bytes32 parentId, bytes32 contentHash, address creator, uint64 createdAt, uint8 kind, string displayText))",
+      "function getWork(bytes32 workId) view returns (tuple(bytes32 workId, bytes32 parentId, bytes32 packageId, bytes32 contentHash, address creator, uint64 createdAt, uint32 packageVersion, uint8 kind, string displayText))",
       "function getAttestation(bytes32 attestationId) view returns (tuple(bytes32 attestationId, bytes32 workId, bytes32 assessmentHash, address reviewer, uint64 createdAt, uint8 interpretation, uint8 resonance, uint8 rhythm, uint8 imagery, bool recognized, string comment))",
       "function responseCount(bytes32 parentId) view returns (uint256)",
       "function attestationCount(bytes32 workId) view returns (uint256)",
       "function getResponseIds(bytes32 parentId, uint256 offset, uint256 limit) view returns (bytes32[])",
       "function getAttestationIds(bytes32 workId, uint256 offset, uint256 limit) view returns (bytes32[])",
-      "function publishPoemUpper(bytes32 workId, string upperLine)",
+      "function publishPoemUpper(bytes32 workId, bytes32 packageId, uint32 packageVersion, string upperLine)",
       "function respondPoem(bytes32 workId, bytes32 parentId, string lowerLine)",
-      "function publishMusic(bytes32 workId, bytes32 recipeHash, string title)",
+      "function publishMusic(bytes32 workId, bytes32 packageId, uint32 packageVersion, bytes32 recipeHash, string title)",
       "function attestMusic(bytes32 attestationId, bytes32 workId, uint8 interpretation, uint8 resonance, uint8 rhythm, uint8 imagery, string comment)",
       "function recognizeAttestation(bytes32 attestationId)",
-      "event WorkPublished(bytes32 indexed workId, bytes32 indexed parentId, address indexed creator, uint8 kind, bytes32 contentHash, string displayText, uint64 createdAt)",
+      "event WorkPublished(bytes32 indexed workId, bytes32 indexed parentId, address indexed creator, uint8 kind, bytes32 packageId, uint32 packageVersion, bytes32 contentHash, string displayText, uint64 createdAt)",
       "event MusicAttested(bytes32 indexed attestationId, bytes32 indexed workId, address indexed reviewer, bytes32 assessmentHash, uint8 interpretation, uint8 resonance, uint8 rhythm, uint8 imagery, string comment, uint64 createdAt)",
       "event AttestationRecognized(bytes32 indexed attestationId, bytes32 indexed workId, address indexed creator, uint64 recognizedAt)",
       "error WorkAlreadyExists(bytes32 workId)",
@@ -66,6 +68,7 @@ window.BOTCHAIN_CONFIG = Object.freeze({
       "error NotWorkCreator(address caller, address creator)",
       "error AttestationAlreadyRecognized(bytes32 attestationId)",
       "error DuplicateMusicReview(bytes32 workId, address reviewer)",
+      "error SourcePackageNotRegistered(bytes32 packageId, uint32 version)",
     ]),
   }),
   registryAbi: Object.freeze([
@@ -79,4 +82,3 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     "event MemoryIssued(bytes32 indexed memoryId, bytes32 indexed packageId, uint32 version, bytes32 payloadHash, address indexed issuer)",
   ]),
 });
-

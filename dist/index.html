@@ -230,15 +230,23 @@
               <label class="memory-note-label" for="player-note">留一句给今日的江城（选填，最多 60 字）</label>
               <textarea id="player-note" maxlength="60" rows="2" placeholder="这一程，我最想记住……"></textarea>
 
-              <section class="chain-seal-panel" aria-labelledby="chain-seal-title">
+              <div class="memory-buttons">
+                <button class="primary-button primary-button--paper" type="button" data-cocreation-poem>发布到链上共创谱系 · 邀好友续一句</button>
+                <button class="text-button text-button--light" type="button" data-action="download-card">下载记忆卡 PNG</button>
+                <button class="text-button text-button--light" type="button" data-action="restart">再游一次</button>
+              </div>
+
+              <details class="official-certification">
+                <summary><span>项目官方认证（可选）</span><small>由项目授权钱包签发，不是普通用户共创的前置条件</small></summary>
+                <section class="chain-seal-panel" aria-labelledby="chain-seal-title">
                 <header class="chain-seal-header">
                   <div>
                     <p class="chain-kicker"><i data-chain-dot></i> BOT Chain Mainnet</p>
-                    <h4 id="chain-seal-title">把这次相逢留下一枚链上印记</h4>
+                    <h4 id="chain-seal-title">为这次相逢签发项目认证</h4>
                   </div>
                   <span class="chain-id-badge">Chain ID 677</span>
                 </header>
-                <p class="chain-privacy">仅登记最终内容摘要，诗文与留言原文不上链。签发交易需要项目授权钱包，并会消耗少量 BOT。</p>
+                <p class="chain-privacy">这是项目方的低频认证层：仅登记最终内容摘要，需授权钱包；普通用户发布唱和不需要此权限。</p>
                 <dl class="chain-facts">
                   <div><dt>钱包</dt><dd data-wallet-address>尚未连接</dd></div>
                   <div><dt>签发权限</dt><dd data-issuer-status>连接后核验</dd></div>
@@ -274,12 +282,8 @@
                   </dl>
                   <button class="text-button text-button--light" type="button" data-action="download-proof">下载核验凭据 JSON</button>
                 </details>
-              </section>
-            </div>
-            <div class="memory-buttons">
-              <button class="primary-button primary-button--paper" type="button" data-action="download-card">下载记忆卡 PNG</button>
-              <button class="primary-button primary-button--paper" type="button" data-cocreation-poem>以首句发起链上唱和</button>
-              <button class="text-button text-button--light" type="button" data-action="restart">再游一次</button>
+                </section>
+              </details>
             </div>
           </div>
         </div>
@@ -515,15 +519,17 @@
             <p class="demo-status" data-boya-chain-card-status><i></i> 本地回执 · 尚未登记 BOT Chain</p>
           </div>
 
-          <section class="chain-seal-panel" data-boya-chain-panel aria-labelledby="boya-chain-title">
+          <details class="official-certification official-certification--boya">
+            <summary><span>项目官方认证（可选）</span><small>由项目授权钱包签发，不影响普通用户发布曲目</small></summary>
+            <section class="chain-seal-panel" data-boya-chain-panel aria-labelledby="boya-chain-title">
             <header class="chain-seal-header">
               <div>
                 <p class="chain-kicker"><i data-boya-chain-dot></i> BOT Chain Mainnet</p>
-                <h4 id="boya-chain-title">把这一曲留下一枚链上印记</h4>
+                <h4 id="boya-chain-title">为这一曲签发项目认证</h4>
               </div>
               <span class="chain-id-badge">Chain ID 677</span>
             </header>
-            <p class="chain-privacy">仅登记配方内容摘要，琴音序列与留言原文不上链。签发交易需要项目授权钱包，并会消耗少量 BOT。</p>
+            <p class="chain-privacy">这是项目方的低频认证层：仅登记配方摘要，需授权钱包；普通用户发布曲目和知音评价不需要此权限。</p>
             <dl class="chain-facts">
               <div><dt>钱包</dt><dd data-boya-wallet-address>尚未连接</dd></div>
               <div><dt>签发权限</dt><dd data-boya-issuer-status>连接后核验</dd></div>
@@ -549,10 +555,11 @@
               </dl>
               <button class="text-button text-button--light" type="button" data-boya-action="download-proof">下载核验凭据 JSON</button>
             </details>
-          </section>
+            </section>
+          </details>
 
           <div class="boya-settle-foot-actions">
-            <button class="primary-button" type="button" data-cocreation-music>发布此曲 · 邀请子期</button>
+            <button class="primary-button" type="button" data-cocreation-music>发布到链上共创谱系 · 邀请子期</button>
             <button class="text-button text-button--light" type="button" data-boya-action="download-recipe">下载配方 JSON</button>
             <button class="text-button text-button--light" type="button" data-boya-action="verify-page">打开链上核验页</button>
             <button class="text-button text-button--light" type="button" data-boya-action="restart">再游一次</button>
@@ -585,4 +592,3 @@
     <script src="./cocreation-entry.js"></script>
   </body>
 </html>
-

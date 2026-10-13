@@ -21,6 +21,7 @@
     writeContract: null,
     readProvider: null,
     readContract: null,
+    sourceContract: null,
     poemParentId: "",
     poemParent: null,
     musicWorkId: "",
@@ -51,6 +52,31 @@
   function configuredAddress() {
     const address = coConfig?.address;
     return Boolean(ethersLib && address && ethersLib.isAddress(address) && address !== ethersLib.ZeroAddress);
+  }
+
+  function configuredSourceRegistry() {
+    return Boolean(ethersLib && config?.registryAddress && ethersLib.isAddress(config.registryAddress));
+  }
+
+  function routePersona(route) {
+    return route === "music" ? config?.personaBoya : config?.persona;
+  }
+
+  function routePersonaLabel(route) {
+    return route === "music" ? "伯牙子期人格包" : "李白人格包";
+  }
+
+  function workSourceLabel(work) {
+    if (!work) return "—";
+    const packageId = String(work.packageId || "").toLowerCase();
+    const poemId = String(config?.persona?.packageId || "").toLowerCase();
+    const musicId = String(config?.personaBoya?.packageId || "").toLowerCase();
+    const name = packageId === poemId
+      ? "李白人格包"
+      : packageId === musicId
+        ? "伯牙子期人格包"
+        : `人格包 ${shortHex(String(work.packageId), 8, 6)}`;
+    return `${name} v${Number(work.packageVersion)}`;
   }
 
   function explorerUrl(kind, value) {
@@ -144,11 +170,20 @@
     if (message.includes("runtime hash mismatch") || message.includes("no runtime code")) {
       return "合约代码与项目固定配置不一致，已安全停止。";
     }
+    if (message.includes("source registry mismatch")) {
+      return "共创合约绑定的人格包注册簿与项目配置不一致，已安全停止。";
+    }
+    if (message.includes("source package not registered")) {
+      return "对应人格包版本尚未在原方案合约登记，不能伪造来源后发布。";
+    }
     if (message.includes("selfresponsenotallowed")) return "上联发起人不能使用同一钱包自己对下联。";
     if (message.includes("selfattestationnotallowed")) return "曲目发布者不能使用同一钱包给自己做知音评价。";
     if (custom === "SelfResponseNotAllowed") return "上联发起人不能使用同一钱包自己对下联。";
     if (custom === "SelfAttestationNotAllowed") return "曲目发布者不能使用同一钱包给自己做知音评价。";
     if (custom === "DuplicateMusicReview") return "同一钱包对这首曲只能提交一次知音评价。";
+    if (custom === "SourcePackageNotRegistered") {
+      return "对应人格包版本尚未在原方案合约登记，不能伪造来源后发布。";
+    }
     if (custom === "NotWorkCreator") return "只有这首曲的发布钱包可以认定知音。";
     if (custom === "AttestationAlreadyRecognized") return "这条知音评价已被认定。";
     if (custom === "WorkAlreadyExists" || custom === "AttestationAlreadyExists") {
@@ -173,18 +208,85 @@
     link.textContent = `${shortHex(coConfig.address)} ↗`;
   }
 
-  async function readContext() {
-    if (!ethersLib || !config || !coConfig?.abi) throw new Error("Chain components not configured");
-    if (!configuredAddress()) throw new Error("Co-creation contract not deployed or not configured");
+  function initializeSourceRegistryLink() {
+    const link = $("[data-source-registry-link]");
+    if (!link) return;
+    if (!configuredSourceRegistry()) {
+      link.removeAttribute("href");
+      link.textContent = "配置缺失";
+      return;
+    }
+    link.href = explorerUrl("address", config.registryAddress);
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = `${shortHex(config.registryAddress)} ↗`;
+
+    const poemPersona = routePersona("poem");
+    const musicPersona = routePersona("music");
+    $("[data-poem-package-id]").textContent = shortHex(poemPersona?.packageId || "", 10, 8);
+    $("[data-music-package-id]").textContent = shortHex(musicPersona?.packageId || "", 10, 8);
+  }
+
+  function publicProvider() {
     if (!state.readProvider) {
       state.readProvider = new ethersLib.JsonRpcProvider(
         config.rpcUrl,
         { chainId: config.chainId, name: config.chainName },
         { staticNetwork: true },
       );
-      state.readContract = new ethersLib.Contract(coConfig.address, coConfig.abi, state.readProvider);
     }
-    return { provider: state.readProvider, contract: state.readContract };
+    return state.readProvider;
+  }
+
+  async function sourceContext(provider = publicProvider()) {
+    if (!configuredSourceRegistry() || !config?.registryAbi) {
+      throw new Error("Source registry not configured");
+    }
+    if (provider === state.readProvider && state.sourceContract) return state.sourceContract;
+    const contract = new ethersLib.Contract(config.registryAddress, config.registryAbi, provider);
+    if (provider === state.readProvider) state.sourceContract = contract;
+    return contract;
+  }
+
+  async function assertSourcePackage(route, provider = state.browserProvider || publicProvider()) {
+    const persona = routePersona(route);
+    if (!persona?.packageId || !Number(persona.version)) {
+      throw new Error("Source package not registered");
+    }
+    const registry = await sourceContext(provider);
+    const exists = await registry.packageExists(persona.packageId, persona.version);
+    if (!exists) throw new Error("Source package not registered");
+    return persona;
+  }
+
+  async function refreshSourcePackageStatus() {
+    for (const route of ["poem", "music"]) {
+      const status = $(`[data-${route}-package-status]`);
+      if (!status) continue;
+      try {
+        await assertSourcePackage(route, publicProvider());
+        status.textContent = "主网已登记 · 可作为作品来源";
+        status.dataset.state = "verified";
+      } catch (error) {
+        if (String(error?.message || "").toLowerCase().includes("not registered")) {
+          status.textContent = "主网尚未登记 · 暂不可发布";
+          status.dataset.state = "missing";
+        } else {
+          status.textContent = "主网暂不可达 · 发布时再核验";
+          status.dataset.state = "pending";
+        }
+      }
+    }
+  }
+
+  async function readContext() {
+    if (!ethersLib || !config || !coConfig?.abi) throw new Error("Chain components not configured");
+    if (!configuredAddress()) throw new Error("Co-creation contract not deployed or not configured");
+    const provider = publicProvider();
+    if (!state.readContract) {
+      state.readContract = new ethersLib.Contract(coConfig.address, coConfig.abi, provider);
+    }
+    return { provider, contract: state.readContract };
   }
 
   async function switchToMainnet(provider) {
@@ -224,6 +326,11 @@
     if (code === "0x") throw new Error("Co-creation contract has no runtime code");
     if (coConfig.expectedRuntimeHash && ethersLib.keccak256(code).toLowerCase() !== coConfig.expectedRuntimeHash.toLowerCase()) {
       throw new Error("Co-creation runtime hash mismatch");
+    }
+    const contract = new ethersLib.Contract(coConfig.address, coConfig.abi, provider);
+    const boundSourceRegistry = await contract.sourceRegistry();
+    if (boundSourceRegistry.toLowerCase() !== config.registryAddress.toLowerCase()) {
+      throw new Error("Co-creation source registry mismatch");
     }
   }
 
@@ -331,12 +438,13 @@
     return url.toString();
   }
 
-  function showResult({ title, receipt, id, shareUrl = "" }) {
+  function showResult({ title, receipt, id, shareUrl = "", source = "—" }) {
     const section = $("[data-result]");
     $("[data-result-title]").textContent = title;
     $("[data-result-hash]").textContent = receipt.hash;
     $("[data-result-block]").textContent = String(receipt.blockNumber);
     $("[data-result-id]").textContent = id;
+    $("[data-result-source]").textContent = source;
     const explorer = $("[data-result-explorer]");
     explorer.href = explorerUrl("tx", receipt.hash);
     state.shareUrl = shareUrl;
@@ -361,6 +469,7 @@
       state.poemParent = work;
       $("[data-upper-line]").textContent = work.displayText;
       $("[data-upper-author]").textContent = work.creator;
+      $("[data-poem-work-source]").textContent = `人格来源已上链：${workSourceLabel(work)}`;
       await renderPoemLineage(contract, parentId);
       if (!options.quiet) setStatus("上联已通过合约 getter 直接回读核验。");
     } catch (error) {
@@ -407,14 +516,26 @@
     setFormBusy(form, true);
     try {
       const contract = await ensureWriteContract();
+      const persona = await assertSourcePackage("poem", state.browserProvider);
       const contentHash = ethersLib.keccak256(ethersLib.toUtf8Bytes(upperLine));
       const workId = createId("poem-upper", state.account, contentHash);
       setStatus("请在钱包中确认“发布上联”主网交易…", "pending");
-      const transaction = await contract.publishPoemUpper(workId, upperLine);
+      const transaction = await contract.publishPoemUpper(
+        workId,
+        persona.packageId,
+        persona.version,
+        upperLine,
+      );
       setStatus(`交易已提交 ${shortHex(transaction.hash, 8, 6)}，正在等待主网确认…`, "pending");
       const receipt = await transaction.wait(1);
       const shareUrl = poemInviteUrl(workId);
-      showResult({ title: "上联已上链，可邀请朋友应句", receipt, id: workId, shareUrl });
+      showResult({
+        title: "上联已上链，可邀请朋友应句",
+        receipt,
+        id: workId,
+        shareUrl,
+        source: `${routePersonaLabel("poem")} v${persona.version}`,
+      });
       setStatus("上联已经主网确认。复制邀请链接，请另一个钱包对下联。");
     } catch (error) {
       setStatus(describeError(error), "error");
@@ -443,7 +564,12 @@
       setStatus("请在钱包中确认“提交下联”主网交易…", "pending");
       const transaction = await contract.respondPoem(workId, state.poemParentId, lowerLine);
       const receipt = await transaction.wait(1);
-      showResult({ title: "下联已上链，唱和关系成立", receipt, id: workId });
+      showResult({
+        title: "下联已上链，唱和关系成立",
+        receipt,
+        id: workId,
+        source: workSourceLabel(state.poemParent),
+      });
       $("#lower-line").value = "";
       const { contract: readContract } = await readContext();
       await renderPoemLineage(readContract, state.poemParentId);
@@ -541,6 +667,7 @@
       if (Number(work.kind) !== 3) throw new Error("Invalid music work");
       state.musicWork = work;
       $("[data-shared-music-title]").textContent = `《${work.displayText}》`;
+      $("[data-music-work-source]").textContent = `人格来源已上链：${workSourceLabel(work)}`;
 
       const recipeJson = readRecipeFragment();
       let verified = false;
@@ -633,14 +760,27 @@
     setFormBusy(form, true);
     try {
       const contract = await ensureWriteContract();
+      const persona = await assertSourcePackage("music", state.browserProvider);
       const recipeHash = ethersLib.keccak256(ethersLib.toUtf8Bytes(recipeJson));
       const workId = createId("music", state.account, recipeHash);
       setStatus("请在钱包中确认“发布曲目指纹”主网交易…", "pending");
-      const transaction = await contract.publishMusic(workId, recipeHash, title);
+      const transaction = await contract.publishMusic(
+        workId,
+        persona.packageId,
+        persona.version,
+        recipeHash,
+        title,
+      );
       setStatus(`交易已提交 ${shortHex(transaction.hash, 8, 6)}，正在等待主网确认…`, "pending");
       const receipt = await transaction.wait(1);
       const shareUrl = musicInviteUrl(workId, recipeJson);
-      showResult({ title: "曲目指纹已上链，可邀请朋友做子期", receipt, id: workId, shareUrl });
+      showResult({
+        title: "曲目指纹已上链，可邀请朋友做子期",
+        receipt,
+        id: workId,
+        shareUrl,
+        source: `${routePersonaLabel("music")} v${persona.version}`,
+      });
       setStatus("曲目已经主网确认。分享邀请链接后，另一个钱包可试听、校验并评价。");
     } catch (error) {
       setStatus(describeError(error), "error");
@@ -686,7 +826,12 @@
         comment,
       );
       const receipt = await transaction.wait(1);
-      showResult({ title: "知音评价已上链", receipt, id: attestationId });
+      showResult({
+        title: "知音评价已上链",
+        receipt,
+        id: attestationId,
+        source: workSourceLabel(state.musicWork),
+      });
       form.reset();
       const { contract: readContract } = await readContext();
       await renderAttestations(readContract, state.musicWorkId);
@@ -707,7 +852,12 @@
       const transaction = await contract.recognizeAttestation(attestationId);
       setStatus(`认定交易已提交 ${shortHex(transaction.hash, 8, 6)}，正在等待确认…`, "pending");
       const receipt = await transaction.wait(1);
-      showResult({ title: "创作者已认定这位知音", receipt, id: attestationId });
+      showResult({
+        title: "创作者已认定这位知音",
+        receipt,
+        id: attestationId,
+        source: workSourceLabel(state.musicWork),
+      });
       const { contract: readContract } = await readContext();
       await renderAttestations(readContract, state.musicWorkId);
       setStatus("知音认定已经主网确认。");
@@ -790,6 +940,8 @@
   }
 
   initializeContractLink();
+  initializeSourceRegistryLink();
+  refreshSourcePackageStatus();
   consumeDrafts();
   bindEvents();
   initializeFromUrl();

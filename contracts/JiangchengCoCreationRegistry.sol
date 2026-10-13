@@ -1,6 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
+interface IJourneyPackageRegistry {
+    function packageExists(
+        bytes32 packageId,
+        uint32 version
+    ) external view returns (bool);
+}
+
 /// @title JiangchengCoCreationRegistry
 /// @notice Permissionless co-creation graph for the Jiangcheng Guren experience.
 /// @dev The contract records compact commitments and social relationships. Poem
@@ -26,9 +33,11 @@ contract JiangchengCoCreationRegistry {
     struct WorkRecord {
         bytes32 workId;
         bytes32 parentId;
+        bytes32 packageId;
         bytes32 contentHash;
         address creator;
         uint64 createdAt;
+        uint32 packageVersion;
         WorkKind kind;
         string displayText;
     }
@@ -51,6 +60,8 @@ contract JiangchengCoCreationRegistry {
     uint256 public constant MAX_MUSIC_TITLE_BYTES = 96;
     uint256 public constant MAX_REVIEW_BYTES = 360;
     uint256 public constant MAX_PAGE_SIZE = 50;
+
+    IJourneyPackageRegistry public immutable sourceRegistry;
 
     mapping(bytes32 => WorkRecord) private works;
     mapping(bytes32 => AttestationRecord) private attestations;
@@ -75,12 +86,16 @@ contract JiangchengCoCreationRegistry {
     error AttestationAlreadyRecognized(bytes32 attestationId);
     error DuplicateMusicReview(bytes32 workId, address reviewer);
     error PageTooLarge(uint256 requested, uint256 maximum);
+    error InvalidSourceRegistry(address registry);
+    error SourcePackageNotRegistered(bytes32 packageId, uint32 version);
 
     event WorkPublished(
         bytes32 indexed workId,
         bytes32 indexed parentId,
         address indexed creator,
         WorkKind kind,
+        bytes32 packageId,
+        uint32 packageVersion,
         bytes32 contentHash,
         string displayText,
         uint64 createdAt
@@ -106,14 +121,29 @@ contract JiangchengCoCreationRegistry {
         uint64 recognizedAt
     );
 
+    constructor(address sourceRegistryAddress) {
+        if (
+            sourceRegistryAddress == address(0) ||
+            sourceRegistryAddress.code.length == 0
+        ) {
+            revert InvalidSourceRegistry(sourceRegistryAddress);
+        }
+        sourceRegistry = IJourneyPackageRegistry(sourceRegistryAddress);
+    }
+
     function publishPoemUpper(
         bytes32 workId,
+        bytes32 packageId,
+        uint32 packageVersion,
         string calldata upperLine
     ) external {
         _requireBoundedText(upperLine, MAX_POEM_LINE_BYTES);
+        _requireRegisteredPackage(packageId, packageVersion);
         _publishWork(
             workId,
             bytes32(0),
+            packageId,
+            packageVersion,
             keccak256(bytes(upperLine)),
             WorkKind.PoemUpper,
             upperLine
@@ -134,6 +164,8 @@ contract JiangchengCoCreationRegistry {
         _publishWork(
             workId,
             parentId,
+            parent.packageId,
+            parent.packageVersion,
             keccak256(bytes(lowerLine)),
             WorkKind.PoemResponse,
             lowerLine
@@ -142,14 +174,19 @@ contract JiangchengCoCreationRegistry {
 
     function publishMusic(
         bytes32 workId,
+        bytes32 packageId,
+        uint32 packageVersion,
         bytes32 recipeHash,
         string calldata title
     ) external {
         if (recipeHash == bytes32(0)) revert ZeroIdentifier();
         _requireBoundedText(title, MAX_MUSIC_TITLE_BYTES);
+        _requireRegisteredPackage(packageId, packageVersion);
         _publishWork(
             workId,
             bytes32(0),
+            packageId,
+            packageVersion,
             recipeHash,
             WorkKind.Music,
             title
@@ -329,6 +366,8 @@ contract JiangchengCoCreationRegistry {
     function _publishWork(
         bytes32 workId,
         bytes32 parentId,
+        bytes32 packageId,
+        uint32 packageVersion,
         bytes32 contentHash,
         WorkKind kind,
         string calldata displayText
@@ -343,9 +382,11 @@ contract JiangchengCoCreationRegistry {
         works[workId] = WorkRecord({
             workId: workId,
             parentId: parentId,
+            packageId: packageId,
             contentHash: contentHash,
             creator: msg.sender,
             createdAt: createdAt,
+            packageVersion: packageVersion,
             kind: kind,
             displayText: displayText
         });
@@ -355,10 +396,25 @@ contract JiangchengCoCreationRegistry {
             parentId,
             msg.sender,
             kind,
+            packageId,
+            packageVersion,
             contentHash,
             displayText,
             createdAt
         );
+    }
+
+    function _requireRegisteredPackage(
+        bytes32 packageId,
+        uint32 packageVersion
+    ) private view {
+        if (
+            packageId == bytes32(0) ||
+            packageVersion == 0 ||
+            !sourceRegistry.packageExists(packageId, packageVersion)
+        ) {
+            revert SourcePackageNotRegistered(packageId, packageVersion);
+        }
     }
 
     function _getWork(

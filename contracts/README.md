@@ -1,10 +1,17 @@
 # 链上共创合约
 
-`JiangchengCoCreationRegistry.sol` 是“江城故人”面向普通参与者的共创谱系合约，与项目原有的“授权 issuer 签发记忆”合约分离。
+`JiangchengCoCreationRegistry.sol` 是“江城故人”面向普通参与者的共创谱系合约。它不复用原合约的 issuer 权限，但在部署时会把原 `JourneyMemoryRegistry` 固定为不可更换的来源注册簿：根作品只有引用已登记的人格包版本才能发布。
+
+这形成两层分工：
+
+- `JourneyMemoryRegistry`：低频登记李白、伯牙等人格包版本；`issueMemory` 只用于可选的项目官方认证。
+- `JiangchengCoCreationRegistry`：高频记录普通用户作品、回应和知音关系；写入仍由用户自己的钱包完成。
 
 ## 权限边界
 
 - 无 owner、无白名单；任何 EVM 钱包都能发布自己的作品或回应。
+- 上联与曲目必须引用来源注册簿中已登记的 `(packageId, version)`；合约不接受伪造或未登记来源。
+- 下联自动继承上联的人格包 ID 与版本，不能自行改换来源。
 - 上联作者不能使用同一钱包自己对下联。
 - 曲目创作者不能使用同一钱包给自己提交知音评价。
 - 同一钱包对同一曲目只能提交一次知音评价；这能减少单地址刷屏，但不能防止多钱包 Sybil。
@@ -14,8 +21,8 @@
 
 | 路线 | 主网写入 | 链上关系 |
 | --- | --- | --- |
-| 李白·诗句唱和 | `publishPoemUpper` / `respondPoem` | 上联 `workId` 与下联 `parentId` 组成不可覆盖的父子关系 |
-| 伯牙子期·知音评价 | `publishMusic` / `attestMusic` / `recognizeAttestation` | 曲目指纹、评价证言与创作者认定 |
+| 李白·诗句唱和 | `publishPoemUpper` / `respondPoem` | 李白人格包版本 → 上联 `workId` → 下联 `parentId` |
+| 伯牙子期·知音评价 | `publishMusic` / `attestMusic` / `recognizeAttestation` | 伯牙人格包版本 → 曲目指纹 → 评价证言 → 创作者认定 |
 
 ## 数据取舍
 
@@ -24,6 +31,7 @@
 - 分享链接将配方放在 URL fragment，页面会在允许评价前重算 Hash 并与链上记录对比。
 - 下联 ID 和知音评价 ID 都有合约内索引；前端通过 getter 回读，不依赖公共 RPC 上可能被禁用的 `eth_getLogs`。
 - 这些记录只能证明某钱包在某时做了某次发布或回应，不等同于现实身份或作品质量认证。
+- 人格包引用证明作品采用哪个项目底稿版本，不等于版权归属证明。
 
 ## 编译基线
 
@@ -32,4 +40,4 @@
 - Optimizer enabled, `runs = 200`
 - SPDX `MIT`
 
-主网部署前，`dist/botchain-config.js` 中的 `coCreationRegistry.address` 、runtime hash 和部署区块保持为空。前端会停用交易并显示“等待主网部署”，不会伪造成功状态。
+部署构造参数必须填写现有 `JourneyMemoryRegistry` 地址；部署脚本会先校验该地址的 runtime bytecode。主网部署前，`dist/botchain-config.js` 中的 `coCreationRegistry.address`、runtime hash 和部署区块保持为空。前端会停用交易并显示“等待主网部署”，不会伪造成功状态。
