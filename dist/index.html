@@ -40,23 +40,23 @@
         <header class="screen-header">
           <p class="eyebrow">第一章 · 择一故人</p>
           <h2 id="select-title">谁与你同游江城？</h2>
-          <p>李白路线已开放，其余三位故人将在后续篇章中抵达。</p>
+          <p>李白与伯牙子期两条路线已开放，屈原、张之洞将在后续篇章中抵达。</p>
         </header>
         <div class="character-grid" role="group" aria-label="选择同行人物">
           <button class="character-card character-card--selectable" type="button" data-character="libai" aria-pressed="false">
-            <img src="./assets/libai-card-v3.png" alt="" loading="lazy" decoding="async" />
+            <img src="./assets/libai-card-v3.png" alt="" decoding="async" />
             <span class="card-caption"><span>李白 <small>黄鹤楼 · 御笔</small></span><strong>可体验</strong></span>
           </button>
+          <button class="character-card character-card--selectable" type="button" data-character="boya_ziqi" aria-pressed="false">
+            <img src="./assets/boya-ziqi-card.png" alt="" decoding="async" />
+            <span class="card-caption"><span>伯牙与钟子期 <small>古琴台 · 琴舟</small></span><strong data-boya-card-state>可体验</strong></span>
+          </button>
           <button class="character-card character-card--selectable" type="button" data-character="quyuan" aria-pressed="false">
-            <img src="./assets/quyuan-card-v2.png" alt="" loading="lazy" decoding="async" />
+            <img src="./assets/quyuan-card-v2.png" alt="" decoding="async" />
             <span class="card-caption"><span>屈原 <small>江滩楚风 · 龙舟</small></span><strong>筹备中</strong></span>
           </button>
-          <button class="character-card character-card--selectable" type="button" data-character="boya_ziqi" aria-pressed="false">
-            <img src="./assets/boya-ziqi-card.png" alt="" loading="lazy" decoding="async" />
-            <span class="card-caption"><span>伯牙与钟子期 <small>古琴台 · 琴舟</small></span><strong>筹备中</strong></span>
-          </button>
           <button class="character-card character-card--selectable" type="button" data-character="zhangzhidong" aria-pressed="false">
-            <img src="./assets/zhangzhidong-card.png" alt="" loading="lazy" decoding="async" />
+            <img src="./assets/zhangzhidong-card.png" alt="" decoding="async" />
             <span class="card-caption"><span>张之洞 <small>汉阳工业 · 蒸汽火车</small></span><strong>筹备中</strong></span>
           </button>
         </div>
@@ -66,7 +66,7 @@
         <button class="text-button text-button--light back-button" type="button" data-action="back-select">返回选卡</button>
         <h2 id="flight-title" class="sr-only">一笔入江城 · 李白篇启幕</h2>
         <div class="opening-frame">
-          <img class="opening-art" src="./assets/libai-opening.png" alt="江城故人李白篇启幕：乘御笔穿行江城，三程借江风，前往黄鹤楼" loading="lazy" decoding="async" />
+          <img class="opening-art" src="./assets/libai-opening.png" alt="江城故人李白篇启幕：乘御笔穿行江城，三程借江风，前往黄鹤楼" decoding="async" />
           <button class="opening-start" type="button" data-action="arrive-map" aria-label="启程，前往江城地图"></button>
         </div>
         <details class="opening-dialogue">
@@ -76,7 +76,7 @@
       </section>
 
       <section class="screen map-screen" data-screen="map" aria-labelledby="map-title" hidden>
-        <img class="map-art" src="./assets/wuhan-map.png" alt="水墨江城地图，标有黄鹤楼等武汉文化地标" loading="lazy" decoding="async" />
+        <img class="map-art" src="./assets/wuhan-map.png" alt="水墨江城地图，标有黄鹤楼等武汉文化地标" decoding="async" />
         <div class="map-shade" aria-hidden="true"></div>
         <header class="map-heading">
           <p class="eyebrow">御笔落处</p>
@@ -93,7 +93,7 @@
       </section>
 
       <section class="screen explore-screen" data-screen="explore" aria-labelledby="explore-title" hidden>
-        <img class="scene-art" src="./assets/tower-view.png" alt="从黄鹤楼眺望长江与长江大桥的数字水墨场景" loading="lazy" decoding="async" />
+        <img class="scene-art" src="./assets/tower-view.png" alt="从黄鹤楼眺望长江与长江大桥的数字水墨场景" decoding="async" />
         <div class="scene-tint" aria-hidden="true"></div>
         <header class="explore-hud">
           <div>
@@ -108,7 +108,7 @@
         </header>
 
         <button class="hotspot hotspot--flute" type="button" data-anchor="jade_flute" aria-label="查看玉笛故事">
-          <span class="hotspot-orbit"></span><span class="hotspot-core"><img src="./assets/jade-flute-icon.png" alt="" loading="lazy" decoding="async" /></span><span class="hotspot-label">玉笛 · 听笛怀远</span>
+          <span class="hotspot-orbit"></span><span class="hotspot-core"><img src="./assets/jade-flute-icon.png" alt="" decoding="async" /></span><span class="hotspot-label">玉笛 · 听笛怀远</span>
         </button>
         <button class="hotspot hotspot--crane" type="button" data-anchor="golden_crane" aria-label="查看黄鹤传说">
           <span class="hotspot-orbit"></span><span class="hotspot-core hotspot-core--crane"><span class="crane-sprite" aria-hidden="true"></span></span><span class="hotspot-label">黄鹤 · 昔人仙踪</span>
@@ -189,7 +189,7 @@
           </section>
 
           <aside class="poet-companion">
-            <img src="./assets/libai-poem-card.png" alt="李白星洲诗客角色卡" loading="lazy" decoding="async" />
+            <img src="./assets/libai-poem-card.png" alt="李白星洲诗客角色卡" decoding="async" />
             <div class="poet-quote">
               <span>链上记忆</span>
               <p data-poet-prompt>江城今夜月如舟，把这份江城诗意留在心里！</p>
@@ -201,7 +201,7 @@
       <section class="screen memory-screen" data-screen="memory" aria-labelledby="memory-title" hidden>
         <div class="memory-stage">
           <div class="memory-card" id="memory-card">
-            <img src="./assets/memory-settlement.png" alt="李白赛博诗旅记忆卡底图" loading="lazy" decoding="async" />
+            <img src="./assets/memory-settlement.png" alt="李白赛博诗旅记忆卡底图" decoding="async" />
             <div class="memory-copy">
               <p class="memory-eyebrow">江城故人 · 李白篇</p>
               <h2 id="memory-title">黄鹤楼同游诗旅记忆</h2>
@@ -283,8 +283,301 @@
         </div>
       </section>
     </main>
+    <!-- ==================== 伯牙子期篇 · 高山流水 ==================== -->
+    <div class="boya-root" data-boya-root hidden>
+      <section class="screen boya-screen boya-launch-screen" data-boya-screen="launch" hidden>
+        <button class="text-button text-button--light back-button" type="button" data-boya-action="back-select">返回选卡</button>
+        <h2 class="sr-only">高山流水 · 伯牙子期篇启幕</h2>
+        <div class="boya-opening-frame">
+          <img class="boya-opening-art" src="./assets/boya-opening.png" alt="江城故人伯牙子期篇启幕：月湖琴台暮色，一程月湖泛舟，二程琴台寻音，三程共谱知音曲" />
+          <button class="boya-opening-start" type="button" data-boya-action="sail-to-map" aria-label="启程，前往江城地图"></button>
+        </div>
+        <details class="opening-dialogue boya-opening-dialogue">
+          <summary>听伯牙说</summary>
+          <blockquote>“后生，且随吾舟入月湖。这湖光千载未歇，当年子期听琴，便是在此处。吾此番鼓琴，不为惊鱼响，不为动鸥舞——只问一句：可有人听懂？”</blockquote>
+        </details>
+      </section>
+
+      <section class="screen map-screen boya-map-screen" data-boya-screen="map" hidden>
+        <img class="map-art" src="./assets/wuhan-map.png" alt="水墨江城地图，标有古琴台、月湖、黄鹤楼等武汉文化地标" />
+        <div class="map-shade" aria-hidden="true"></div>
+        <header class="map-heading">
+          <p class="eyebrow">琴舟离岸</p>
+          <h2>琴台 · 月湖</h2>
+          <p>本地图为数字游览舞台，不作为现实导航。</p>
+        </header>
+        <button class="map-destination boya-map-destination" type="button" data-boya-action="arrive-lake" aria-label="进入琴台月湖数字场景" hidden>
+          <span class="map-pulse boya-map-pulse" aria-hidden="true"></span>
+          <span class="map-pin-label">抵达 · 琴台月湖</span>
+        </button>
+        <div class="boya-map-route" aria-hidden="true"><span></span></div>
+        <img class="boya-map-boat" data-boya-map-boat src="./assets/boya-boat-sail.webp" alt="琴舟沿长江驶向琴台月湖" hidden />
+        <p class="map-flight-status" data-boya-map-status aria-live="polite" hidden>琴舟正驶向琴台月湖……</p>
+      </section>
+
+      <section class="screen boya-screen boya-lake-screen" data-boya-screen="lake" hidden>
+        <img class="scene-art" src="./assets/boya-moonlake.png" alt="月湖夜色水墨场景：湖畔亭台垂柳、水面浮萍与倒影" />
+        <div class="scene-tint boya-scene-tint" aria-hidden="true"></div>
+        <header class="explore-hud">
+          <div>
+            <p class="eyebrow eyebrow--light">第一锚点 · 月湖</p>
+            <h2>琴台月湖畔，知音寻踪</h2>
+          </div>
+          <div class="ink-progress" aria-live="polite" aria-label="寻音进度">
+            <span>寻音进度</span>
+            <strong data-boya-progress-count>0 / 2</strong>
+            <div class="stamp-row" aria-hidden="true"><i></i><i></i></div>
+          </div>
+        </header>
+        <button class="hotspot boya-hotspot boya-hotspot--lake" type="button" data-boya-anchor="moon_lake" aria-label="查看月湖知音故事">
+          <span class="hotspot-orbit"></span>
+          <span class="hotspot-core boya-hotspot-core">湖</span>
+          <span class="hotspot-label">月湖 · 水面如镜</span>
+        </button>
+        <nav class="anchor-nav" aria-label="剧情锚点快捷入口">
+          <button type="button" data-boya-anchor="moon_lake">月湖</button>
+          <button type="button" data-boya-anchor="qin_tai" data-boya-locked="true">琴台</button>
+        </nav>
+        <p class="boya-hint" data-boya-hint>先在月湖停留，听伯牙说一段旧事。</p>
+        <dialog class="anchor-media-dialog" data-boya-dialog="moon_lake" aria-label="月湖知音动效">
+          <button class="anchor-dialog-close" type="button" data-boya-action="close-dialog" aria-label="关闭月湖动效">×</button>
+          <img src="./assets/boya-moonlake-water.gif" alt="月湖水面流动，水波与浮萍随夜色轻漾" />
+          <p>月湖 · 水面如镜</p>
+          <aside class="journey-card" aria-label="月湖剧情卡片">
+            <div class="speaker-row"><span class="speaker-seal">牙</span><div><span>同行者</span><strong>伯牙 · AI 演绎</strong></div></div>
+            <p class="story-kicker" data-boya-story-type></p>
+            <h3 data-boya-story-title></h3>
+            <p class="journey-dialogue" data-boya-story-dialogue></p>
+            <p class="journey-note" data-boya-story-note></p>
+            <details class="journey-source"><summary>查看典故来源</summary><div data-boya-story-source></div></details>
+            <button class="primary-button journey-ack" type="button" data-boya-action="ack-anchor">完成此处寻音</button>
+          </aside>
+        </dialog>
+      </section>
+
+      <section class="screen boya-screen boya-qintai-screen" data-boya-screen="qintai" hidden>
+        <img class="scene-art" src="./assets/boya-qintai.png" alt="琴台遗址水墨场景：松竹云雾间的古琴台与层叠楼阁" />
+        <div class="scene-tint boya-scene-tint" aria-hidden="true"></div>
+        <header class="explore-hud">
+          <div>
+            <p class="eyebrow eyebrow--light">第二锚点 · 琴台</p>
+            <h2>高山流水遇知音</h2>
+          </div>
+          <div class="ink-progress" aria-live="polite" aria-label="寻音进度">
+            <span>寻音进度</span>
+            <strong data-boya-progress-count>0 / 2</strong>
+            <div class="stamp-row" aria-hidden="true"><i></i><i></i></div>
+          </div>
+        </header>
+        <button class="hotspot boya-hotspot boya-hotspot--qintai" type="button" data-boya-anchor="qin_tai" aria-label="查看琴台知音故事">
+          <span class="hotspot-orbit"></span>
+          <span class="hotspot-core boya-hotspot-core">琴</span>
+          <span class="hotspot-label">琴台 · 石台虽旧</span>
+        </button>
+        <nav class="anchor-nav" aria-label="剧情锚点快捷入口">
+          <button type="button" data-boya-anchor="moon_lake" data-boya-done="true">月湖</button>
+          <button type="button" data-boya-anchor="qin_tai">琴台</button>
+        </nav>
+        <button class="primary-button explore-next" type="button" data-boya-action="start-qin" hidden>拨动五弦 · 化作一曲</button>
+        <dialog class="anchor-media-dialog" data-boya-dialog="qin_tai" aria-label="琴台知音动效">
+          <button class="anchor-dialog-close" type="button" data-boya-action="close-dialog" aria-label="关闭琴台动效">×</button>
+          <img src="./assets/boya-qintai-mist.gif" alt="琴台松竹云雾流动，远山时隐时现" />
+          <p>琴台 · 知音之意千载不绝</p>
+          <aside class="journey-card" aria-label="琴台剧情卡片">
+            <div class="speaker-row"><span class="speaker-seal">牙</span><div><span>同行者</span><strong>伯牙 · AI 演绎</strong></div></div>
+            <p class="story-kicker" data-boya-story-type></p>
+            <h3 data-boya-story-title></h3>
+            <p class="journey-dialogue" data-boya-story-dialogue></p>
+            <p class="journey-note" data-boya-story-note></p>
+            <details class="journey-source"><summary>查看典故来源</summary><div data-boya-story-source></div></details>
+            <button class="primary-button journey-ack" type="button" data-boya-action="ack-anchor">完成此处寻音</button>
+          </aside>
+        </dialog>
+      </section>
+
+      <section class="screen boya-screen boya-sail-screen" data-boya-screen="sail" hidden>
+        <img class="scene-art boya-sail-bg" src="./assets/boya-moonlake.png" alt="" aria-hidden="true" />
+        <div class="boya-sail-veil" aria-hidden="true"></div>
+        <img class="boya-sail-boat" src="./assets/boya-boat-sail.webp" alt="琴舟横渡月湖，向琴台驶去" />
+        <p class="boya-sail-status" data-boya-sail-status aria-live="polite">琴舟离岸 · 往琴台去……</p>
+      </section>
+
+      <section class="screen boya-screen boya-qin-screen" data-boya-screen="qin" hidden>
+        <header class="boya-qin-header">
+          <button class="text-button" type="button" data-boya-action="back-qintai">‹ 返回琴台</button>
+        </header>
+
+        <div class="boya-qin-layout">
+          <section class="boya-qin-stage" aria-labelledby="boya-guqin-title">
+            <h3 id="boya-guqin-title" class="sr-only">五弦琴音共创舞台</h3>
+            <div class="boya-guqin-frame">
+              <canvas class="boya-guqin-canvas" data-boya-canvas role="img"
+                aria-label="五弦琴音舞台：横向拨弦可奏出宫商角徵羽五个音"></canvas>
+            </div>
+            <p class="boya-guqin-readout" data-boya-readout aria-live="polite">按住琴弦左右拨动，即可成音。至少拨响 3 声。</p>
+            <div class="boya-string-keys" role="group" aria-label="五弦琴音键盘">
+              <button type="button" class="boya-string-key" data-boya-string="0"><span>宫</span><small>do</small></button>
+              <button type="button" class="boya-string-key" data-boya-string="1"><span>商</span><small>re</small></button>
+              <button type="button" class="boya-string-key" data-boya-string="2"><span>角</span><small>mi</small></button>
+              <button type="button" class="boya-string-key" data-boya-string="3"><span>徵</span><small>sol</small></button>
+              <button type="button" class="boya-string-key" data-boya-string="4"><span>羽</span><small>la</small></button>
+            </div>
+            <ol class="boya-note-trail" data-boya-note-trail aria-label="已奏琴音序列"></ol>
+            <div class="boya-preview-row">
+              <button class="boya-track-play boya-track-play--inline" type="button" data-boya-action="play-tune" data-boya-play-state="idle" aria-label="试听此曲">
+                <span aria-hidden="true">▶</span>
+              </button>
+              <span class="boya-preview-status" data-boya-preview-status>定心境后，可在此试听已谱之曲</span>
+              <button class="text-button boya-recompose-inline" type="button" data-boya-action="recompose">↺ 重新谱曲</button>
+            </div>
+          </section>
+
+          <aside class="boya-qin-panel">
+            <section class="boya-config" aria-labelledby="boya-mood-title">
+              <h3 id="boya-mood-title">一 · 定心境</h3>
+              <div class="boya-theme-choice" role="group" aria-label="选择高山或流水心境">
+                <button type="button" class="boya-theme-card" data-boya-theme="mountain" aria-pressed="false">
+                  <strong>高山</strong><small>巍巍乎若泰山</small>
+                  <em>三角波 · 低沉厚重，长回响</em>
+                </button>
+                <button type="button" class="boya-theme-card" data-boya-theme="water" aria-pressed="false">
+                  <strong>流水</strong><small>洋洋乎若江河</small>
+                  <em>正弦波 · 明亮轻快，短回声</em>
+                </button>
+              </div>
+              <p class="boya-selection-hint" data-boya-theme-hint>请选择高山或流水心境</p>
+            </section>
+
+            <section class="boya-config" aria-labelledby="boya-layer-title">
+              <h3 id="boya-layer-title">二 · 添江城声景<small>最多 2 种 · 最少 1 种</small></h3>
+              <div class="boya-layer-list" role="group" aria-label="江城声景">
+                <button type="button" class="boya-layer-chip" data-boya-layer="江水" aria-pressed="false">江水</button>
+                <button type="button" class="boya-layer-chip" data-boya-layer="风过林叶" aria-pressed="false">风过林叶</button>
+                <button type="button" class="boya-layer-chip" data-boya-layer="雨打芭蕉" aria-pressed="false">雨打芭蕉</button>
+                <button type="button" class="boya-layer-chip" data-boya-layer="渔舟晚唱" aria-pressed="false">渔舟晚唱</button>
+              </div>
+              <p class="boya-selection-hint" data-boya-layer-hint>最多选择两种，最少选择一种。</p>
+            </section>
+
+            <section class="boya-config boya-config--title" aria-labelledby="boya-title-label">
+              <h3 id="boya-title-label">三 · 为此曲命名</h3>
+              <input id="boya-recipe-title" class="title-input" maxlength="16" value="月湖琴台知音共奏" />
+            </section>
+
+            <p class="boya-gate-error" data-boya-gate-error role="alert" hidden></p>
+            <button class="primary-button boya-generate" type="button" data-boya-action="generate-recipe">生成音乐配方</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="screen boya-screen boya-capsule-screen" data-boya-screen="capsule" hidden>
+        <div class="boya-settle-stage">
+          <section class="boya-settle-panel" aria-labelledby="boya-settle-title">
+            <p class="boya-settle-kicker"><i aria-hidden="true"></i> 高山流水人格结算</p>
+            <h2 id="boya-settle-title" data-boya-settle-title>流水知音者</h2>
+            <p class="boya-settle-motto">山水有相逢 · 知音自千古</p>
+            <p class="boya-settle-desc" data-boya-settle-desc></p>
+            <div class="boya-settle-bars" data-boya-settle-bars></div>
+            <div class="receipt-strip boya-settle-receipt">
+              <div><span>曲目编号</span><code data-boya-capsule-id>JC-BY-DEMO</code></div>
+              <div><span>配方摘要</span><code data-boya-capsule-hash>计算中…</code></div>
+            </div>
+          </section>
+
+          <section class="boya-settle-track" aria-labelledby="boya-track-title">
+            <p class="boya-settle-track-kicker">专属曲目</p>
+            <h3 id="boya-track-title" data-boya-capsule-title>《未命名》</h3>
+            <p class="boya-settle-track-sub">根据你的心境与琴音生成</p>
+            <div class="boya-track-player">
+              <button class="boya-track-play" type="button" data-boya-action="play-tune" aria-label="试听这段音律" data-boya-play-state="idle">
+                <span aria-hidden="true">▶</span>
+              </button>
+              <div class="boya-track-progress" aria-hidden="true">
+                <i data-boya-track-fill></i>
+              </div>
+              <span class="boya-track-time" data-boya-track-time>00:00</span>
+            </div>
+            <p class="boya-settle-track-quote">「潮起潮落，山水相和，愿此曲，赠予每一个愿意倾听的灵魂。」</p>
+            <div class="boya-track-actions">
+              <button class="primary-button" type="button" data-boya-action="download-tune">下载这段音律（WAV）</button>
+              <button class="text-button text-button--light" type="button" data-boya-action="back-qin">‹ 返回谱曲修改</button>
+            </div>
+            <p class="boya-settle-track-status" data-boya-track-status aria-live="polite"></p>
+          </section>
+        </div>
+
+        <div class="boya-settle-foot">
+          <div class="boya-settle-foot-note">
+            <label class="memory-note-label" for="boya-player-note">留一句给今日的知音（选填，最多 60 字）</label>
+            <textarea id="boya-player-note" maxlength="60" rows="2" placeholder="这一曲，我想记下……"></textarea>
+            <p class="demo-status" data-boya-chain-card-status><i></i> 本地回执 · 尚未登记 BOT Chain</p>
+          </div>
+
+          <section class="chain-seal-panel" data-boya-chain-panel aria-labelledby="boya-chain-title">
+            <header class="chain-seal-header">
+              <div>
+                <p class="chain-kicker"><i data-boya-chain-dot></i> BOT Chain Mainnet</p>
+                <h4 id="boya-chain-title">把这一曲留下一枚链上印记</h4>
+              </div>
+              <span class="chain-id-badge">Chain ID 677</span>
+            </header>
+            <p class="chain-privacy">仅登记配方内容摘要，琴音序列与留言原文不上链。签发交易需要项目授权钱包，并会消耗少量 BOT。</p>
+            <dl class="chain-facts">
+              <div><dt>钱包</dt><dd data-boya-wallet-address>尚未连接</dd></div>
+              <div><dt>签发权限</dt><dd data-boya-issuer-status>连接后核验</dd></div>
+              <div><dt>人格包</dt><dd data-boya-persona-status>伯牙人格包 v1</dd></div>
+              <div><dt>应用合约</dt><dd><a data-boya-contract-link href="#" target="_blank" rel="noreferrer">加载配置中…</a></dd></div>
+            </dl>
+            <div class="chain-actions">
+              <button class="text-button text-button--light chain-connect" type="button" data-boya-action="connect-wallet">连接 MetaMask</button>
+              <button class="seal-button" type="button" data-boya-action="seal-capsule" disabled>核验后登记主网</button>
+            </div>
+            <p class="chain-status" data-boya-chain-status role="status" aria-live="polite">连接钱包后将依次核验网络、合约代码、人格包与签发权限。</p>
+            <a class="chain-tx-link" data-boya-chain-tx-link href="#" target="_blank" rel="noreferrer" hidden>在 BOT Chain 浏览器查看交易 ↗</a>
+            <div class="chain-recovery-actions">
+              <button class="text-button text-button--light" type="button" data-boya-action="verify-transaction" hidden>重新核验这笔交易</button>
+            </div>
+            <details class="chain-proof" data-boya-chain-proof hidden>
+              <summary data-boya-proof-title>查看完整链上核验凭据</summary>
+              <dl>
+                <div><dt>On-chain memoryId</dt><dd><code data-boya-proof-memory-id></code></dd></div>
+                <div><dt>payloadHash</dt><dd><code data-boya-proof-payload-hash></code></dd></div>
+                <div><dt>issuer</dt><dd><code data-boya-proof-issuer></code></dd></div>
+                <div><dt>交易区块</dt><dd><code data-boya-proof-block></code></dd></div>
+              </dl>
+              <button class="text-button text-button--light" type="button" data-boya-action="download-proof">下载核验凭据 JSON</button>
+            </details>
+          </section>
+
+          <div class="boya-settle-foot-actions">
+            <button class="text-button text-button--light" type="button" data-boya-action="download-recipe">下载配方 JSON</button>
+            <button class="text-button text-button--light" type="button" data-boya-action="verify-page">打开链上核验页</button>
+            <button class="text-button text-button--light" type="button" data-boya-action="restart">再游一次</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="verify-screen" data-verify-screen hidden>
+      <div class="verify-shell">
+        <header class="verify-header">
+          <p class="eyebrow">江城故人 · 链上独立核验</p>
+          <h1>记忆核验页</h1>
+          <p>本页只读取 BOT Chain Mainnet 上的公开记录，不连接钱包、不发起任何交易。</p>
+        </header>
+        <form class="verify-form" data-verify-form>
+          <label for="verify-input">memoryId（链上 bytes32 或本地胶囊编号）</label>
+          <input id="verify-input" class="title-input" placeholder="0x… 或 JC-BY-…" autocomplete="off" spellcheck="false" />
+          <button class="primary-button" type="submit">核验这条记忆</button>
+        </form>
+        <div class="verify-result" data-verify-result aria-live="polite"></div>
+        <button class="text-button verify-back" type="button" data-boya-action="verify-back">返回游戏</button>
+      </div>
+    </section>
+
     <script src="./vendor/ethers.umd.min.js"></script>
     <script src="./botchain-config.js"></script>
     <script src="./game.js"></script>
+    <script src="./boya.js"></script>
   </body>
 </html>

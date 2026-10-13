@@ -361,3 +361,210 @@ h1 { margin: 0; font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 600; line-he
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* ==================== 伯牙子期篇 · 高山流水 ==================== */
+.boya-root { position: fixed; z-index: 30; inset: 0; overflow: hidden auto; background: #0b252a; }
+.boya-screen { padding: 0; overflow: hidden; }
+
+/* 启幕 · 开屏图 + 启程热区 */
+.boya-launch-screen { display: grid; place-items: center; min-height: 100svh; padding: 0; color: #fff7e6; background: #071b20; }
+.boya-opening-frame { position: relative; width: min(100vw, calc(100svh * 1672 / 941)); aspect-ratio: 1672 / 941; }
+.boya-opening-art { display: block; width: 100%; height: 100%; object-fit: contain; animation: boya-opening-in 1.6s ease both; }
+.boya-opening-start { position: absolute; left: 40%; top: 88%; width: 20%; height: 10%; border: 0; border-radius: 999px; background: transparent; cursor: pointer; transition: background 180ms ease; }
+.boya-opening-start:hover { background: rgba(255,241,191,.12); }
+.boya-opening-start:focus-visible { outline: 3px solid #fff7d8; outline-offset: 4px; }
+.boya-opening-dialogue { position: absolute; z-index: 4; top: 14px; right: 18px; max-width: min(360px, 45vw); padding: 9px 13px; border: 1px solid rgba(255,241,191,.6); border-radius: 12px; color: #fff7e6; background: rgba(4,18,22,.82); font: .88rem/1.5 system-ui, sans-serif; }
+.boya-opening-dialogue summary { cursor: pointer; font-weight: 700; }
+.boya-opening-dialogue blockquote { margin: 10px 0 2px; font: 1rem/1.6 "Songti SC", serif; }
+@keyframes boya-opening-in { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
+
+/* 大地图 · 泛舟驶向琴台月湖 */
+.boya-map-screen { display: grid; place-items: center; padding: 0; overflow: hidden; color: #f9f1dc; background: #183238; }
+.boya-map-destination { position: absolute; z-index: 4; left: 20%; top: 72%; border: 0; padding: 0; color: #fff; background: transparent; cursor: pointer; }
+.boya-map-pulse { position: relative; display: block; width: 32px; height: 32px; margin: 0 auto 11px; border: 8px solid rgba(255,255,255,.86); border-radius: 50%; background: #2f9e94; box-shadow: 0 0 0 0 rgba(117,213,210,.65); animation: pin-pulse 2s infinite; }
+.boya-map-destination:focus-visible { outline: 3px solid var(--cyan); outline-offset: 9px; border-radius: 50%; }
+.boya-map-route { position: absolute; z-index: 3; left: 26%; top: 79%; width: 30%; height: 2px; background: repeating-linear-gradient(90deg, rgba(120,224,214,.85) 0 8px, transparent 8px 16px); filter: drop-shadow(0 0 7px rgba(120,224,214,.8)); }
+.boya-map-route span { position: absolute; right: -4px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #8ff0e6; }
+.boya-map-boat { position: absolute; z-index: 5; left: 56%; top: 63%; width: min(19vw, 250px); height: auto; object-fit: contain; filter: drop-shadow(0 12px 14px rgba(0,0,0,.35)); animation: boya-map-sail 4.4s linear both; pointer-events: none; }
+.boya-map-boat[hidden] { display: none; }
+@keyframes boya-map-sail {
+  0% { left: 56%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 27.5%; opacity: 1; }
+}
+
+/* 月湖 / 琴台 场景 */
+.boya-scene-tint { background: linear-gradient(180deg, rgba(7,24,28,.68), transparent 42%, rgba(7,24,28,.32)); }
+.boya-hotspot--lake { left: 50%; top: 62%; }
+.boya-hotspot--qintai { left: 56%; top: 40%; }
+.boya-hotspot-core { font-size: 1.2rem; font-family: 'Songti SC', serif; }
+.boya-lake-screen .explore-hud h2, .boya-qintai-screen .explore-hud h2 {
+  color: #fff8e8;
+  text-shadow: 0 1px 2px rgba(0,0,0,.95), 0 2px 10px rgba(0,0,0,.9), 0 0 28px rgba(0,0,0,.75), 0 0 60px rgba(0,0,0,.5);
+}
+.boya-qintai-screen .explore-hud .eyebrow--light, .boya-qintai-screen .explore-hud h2 { -webkit-text-stroke: .4px rgba(0,0,0,.55); }
+.boya-hint { position: absolute; z-index: 6; left: 50%; bottom: clamp(78px, 12vh, 130px); transform: translateX(-50%); margin: 0; padding: 11px 22px; border: 1px solid rgba(255,255,255,.5); border-radius: 999px; color: #fff; background: rgba(7,32,37,.78); backdrop-filter: blur(12px); font: 700 .92rem/1.2 system-ui, sans-serif; white-space: nowrap; }
+.boya-hint:empty { display: none; }
+.boya-pulse { animation: boya-pulse 1.5s ease-in-out 2; }
+@keyframes boya-pulse { 0%, 100% { box-shadow: 0 18px 50px rgba(0,0,0,.38); } 50% { box-shadow: 0 0 0 12px rgba(255,241,191,.28), 0 18px 50px rgba(0,0,0,.38); } }
+
+/* 泛舟过渡（月湖 → 琴台） */
+.boya-sail-screen { display: grid; place-items: center; background: #071b20; }
+.boya-sail-bg { opacity: .5; filter: blur(2px) saturate(.8); }
+.boya-sail-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,22,26,.7), rgba(6,22,26,.42)); }
+.boya-sail-boat { position: relative; z-index: 2; width: min(620px, 74vw); animation: boya-sail-across 2.8s ease-in-out both; }
+.boya-sail-status { position: absolute; z-index: 3; bottom: 9%; margin: 0; padding: 11px 22px; border: 1px solid rgba(255,255,255,.6); border-radius: 999px; color: #fff; background: rgba(7,26,30,.84); font: 700 1rem/1.2 system-ui, sans-serif; }
+@keyframes boya-sail-across { 0% { transform: translateX(-46vw) scale(.82); opacity: 0; } 22% { opacity: 1; } 78% { opacity: 1; } 100% { transform: translateX(44vw) scale(1.04); opacity: 0; } }
+
+/* 五弦琴共创舞台 · 纸质卷轴风 */
+.boya-qin-screen { overflow: hidden auto; padding: clamp(22px, 4vw, 52px); color: var(--ink); background:
+  radial-gradient(circle at 82% 6%, rgba(207,173,100,.16), transparent 26%),
+  radial-gradient(circle at 18% 12%, #f6eed9, #ecdfc3 58%, #dccba8); }
+.boya-qin-screen::before { content: ""; position: absolute; inset: 12px; pointer-events: none; border: 1px solid rgba(140,94,64,.28); border-radius: 18px; }
+.boya-qin-header { position: absolute; z-index: 6; top: 16px; right: 20px; margin: 0; padding: 6px 10px; border: 1px solid rgba(140,94,64,.4); border-radius: 999px; background: rgba(255,252,244,.7); backdrop-filter: blur(8px); }
+.boya-qin-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr); gap: clamp(22px, 3.4vw, 46px); max-width: 1360px; margin: 0 auto; align-items: start; }
+.boya-guqin-frame { position: relative; overflow: hidden; aspect-ratio: 1448 / 836; border: 2px solid rgba(176,141,64,.65); border-radius: 22px 8px 22px 8px; box-shadow: 0 20px 52px rgba(74,46,30,.24), inset 0 0 0 1px rgba(207,173,100,.5); background: url("./assets/boya-guqin-panel.png") top center / 100% auto no-repeat #f6eed9; }
+.boya-guqin-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background: transparent; touch-action: none; cursor: crosshair; }
+.boya-guqin-readout { margin: 10px 2px 0; color: #6b4a2b; font: .86rem/1.5 system-ui, sans-serif; }
+
+/* 五弦组件底下：试听 + 重新谱曲 */
+.boya-preview-row { display: flex; align-items: center; gap: 13px; margin-top: 14px; padding: 11px 14px; border: 1px solid rgba(176,141,64,.45); border-radius: 14px 4px 14px 4px; background: rgba(255,252,244,.55); }
+.boya-track-play--inline { width: 42px; height: 42px; font-size: .95rem; }
+.boya-preview-status { flex: 1; min-width: 0; color: #6b4a2b; font: .82rem/1.4 system-ui, sans-serif; }
+.boya-recompose-inline { color: #8c6a4f; font-size: .84rem; white-space: nowrap; }
+.boya-recompose-inline:hover { color: var(--cinnabar); }
+.boya-string-keys { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; margin-top: 16px; }
+.boya-string-key { display: grid; justify-items: center; gap: 3px; padding: 12px 4px; border: 1px solid rgba(140,94,64,.45); border-radius: 12px 3px 12px 3px; color: #4a2e1e; background: rgba(255,252,244,.6); cursor: pointer; transition: transform 140ms ease, background 140ms ease; box-shadow: 0 4px 14px rgba(74,46,30,.12); }
+.boya-string-key:hover { transform: translateY(-3px); background: rgba(255,255,255,.85); }
+.boya-string-key:active { transform: translateY(1px); background: var(--cinnabar); color: #fff; }
+.boya-string-key:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.boya-string-key span { font: 700 1.3rem/1 'Songti SC', serif; }
+.boya-string-key small { color: #8c6a4f; font: 600 .68rem/1 system-ui, sans-serif; }
+.boya-note-trail { display: flex; flex-wrap: wrap; gap: 6px; min-height: 38px; margin: 16px 0 0; padding: 10px; border: 1px dashed rgba(140,94,64,.42); border-radius: 12px; list-style: none; background: rgba(255,252,244,.4); }
+.boya-note-trail:empty::after { content: "尚未奏音——在画面上按住琴弦左右拨动，或点下方琴音键。"; color: #8c6a4f; font: .82rem/1.4 system-ui, sans-serif; }
+.boya-note-chip { padding: 5px 11px; border-radius: 999px; color: #fff; background: var(--cinnabar); font: 700 .8rem/1 system-ui, sans-serif; }
+.boya-note-chip.is-down { background: #2f6f74; }
+.boya-qin-panel { display: grid; gap: 16px; padding: 24px 22px; border: 1px solid rgba(140,94,64,.4); border-radius: 20px 6px 20px 6px; background: linear-gradient(180deg, rgba(255,252,242,.9), rgba(248,240,222,.82)); box-shadow: 0 18px 48px rgba(74,46,30,.18), inset 0 0 0 4px rgba(255,255,255,.4); }
+.boya-config h3 { display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 11px; padding-bottom: 8px; border-bottom: 1px solid rgba(140,94,64,.26); font: 700 1.06rem/1.3 'Songti SC', serif; color: #4a2e1e; }
+.boya-config h3 small { color: #8c6a4f; font: 600 .72rem/1 system-ui, sans-serif; }
+.boya-theme-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.boya-theme-card { display: grid; gap: 4px; padding: 15px 13px; text-align: left; border: 2px solid rgba(140,94,64,.3); border-radius: 14px 3px 14px 3px; color: #4a2e1e; background: rgba(255,255,255,.5); cursor: pointer; transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
+.boya-theme-card:hover { transform: translateY(-3px); }
+.boya-theme-card.is-selected { border-color: var(--cinnabar); background: rgba(255,252,244,.95); box-shadow: 0 12px 30px rgba(162,60,49,.22), inset 0 0 0 1px rgba(207,173,100,.4); }
+.boya-theme-card strong { font: 700 1.32rem/1.2 'Songti SC', serif; }
+.boya-theme-card small { color: var(--cinnabar); font: 700 .78rem/1.3 'Songti SC', serif; }
+.boya-theme-card em { color: #8c6a4f; font: .72rem/1.4 system-ui, sans-serif; font-style: normal; }
+.boya-layer-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.boya-layer-chip { padding: 9px 6px; border: 1px solid rgba(140,94,64,.4); border-radius: 999px; color: #4a2e1e; background: rgba(255,255,255,.5); cursor: pointer; font: 600 .88rem/1.2 'Songti SC', serif; text-align: center; white-space: nowrap; }
+.boya-layer-chip.is-selected { border-color: var(--cinnabar); color: #fff; background: var(--cinnabar); }
+.boya-selection-hint { margin: 10px 0 0; color: #8c6a4f; font: .8rem/1.45 system-ui, sans-serif; }
+.boya-gate-error { margin: 0; padding: 11px 14px; border-left: 4px solid var(--cinnabar); border-radius: 8px; color: #8c2f26; background: rgba(162,60,49,.12); font: 700 .85rem/1.5 system-ui, sans-serif; }
+.boya-gate-error[hidden] { display: none; }
+.boya-generate { width: 100%; margin-top: 4px; padding: 16px; font-size: 1rem; }
+.boya-recompose { justify-self: center; margin-top: 2px; color: #8c6a4f; font-size: .84rem; }
+.boya-recompose:hover { color: var(--cinnabar); }
+
+/* 结算 · 高山流水人格结算 */
+.boya-capsule-screen { overflow: hidden auto; padding: clamp(20px, 3.4vw, 48px); color: #fff5df; background: url("./assets/boya-settle-bg.png") center / cover no-repeat fixed #0a2226; }
+.boya-capsule-screen::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(6,18,20,.34), rgba(6,18,20,.14) 40%, rgba(6,18,20,.5)); }
+.boya-capsule-screen > * { position: relative; }
+.boya-settle-stage { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .9fr); gap: clamp(18px, 2.6vw, 36px); width: min(1240px, 100%); margin: 0 auto; align-items: stretch; }
+.boya-settle-panel { display: flex; flex-direction: column; padding: clamp(20px, 2.6vw, 34px); border: 1px solid rgba(207,173,100,.6); border-radius: 24px 6px 24px 6px; background: linear-gradient(180deg, rgba(250,244,228,.9), rgba(240,229,204,.86)); backdrop-filter: blur(6px); box-shadow: 0 24px 70px rgba(0,0,0,.35), inset 0 0 0 4px rgba(255,255,255,.3); color: #4a2e1e; }
+.boya-settle-kicker { display: flex; align-items: center; gap: 9px; margin: 0 0 10px; color: var(--cinnabar); font: 800 .8rem/1 system-ui, sans-serif; letter-spacing: .18em; }
+.boya-settle-kicker i { width: 9px; height: 9px; border-radius: 50%; background: var(--cinnabar); box-shadow: 0 0 0 4px rgba(162,60,49,.16); }
+.boya-settle-panel h2 { margin: 0 0 6px; font-size: clamp(2.2rem, 4.4vw, 4rem); line-height: 1.04; color: #2b1c12; letter-spacing: -.02em; }
+.boya-settle-motto { margin: 0 0 14px; color: var(--cinnabar); font: 700 .95rem/1.4 'Songti SC', serif; letter-spacing: .14em; }
+.boya-settle-desc { margin: 0 0 20px; max-width: 60ch; color: #5c4326; font: .98rem/1.8 system-ui, sans-serif; }
+.boya-settle-bars { display: grid; gap: 13px; margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(140,94,64,.3); }
+.boya-settle-bar { display: grid; grid-template-columns: auto 52px minmax(0,1fr) 52px auto; align-items: center; gap: 10px; }
+.boya-settle-bar-name { display: grid; place-items: center; min-width: 34px; height: 34px; border-radius: 9px 3px 9px 3px; color: #fff; background: #2b1c12; font: 700 .92rem/1 'Songti SC', serif; }
+.boya-settle-bar-pct { min-width: 44px; text-align: center; font: 800 .84rem/1 system-ui, sans-serif; color: #4a2e1e; }
+.boya-settle-bar-track { display: flex; height: 12px; overflow: hidden; border-radius: 999px; background: rgba(74,46,30,.14); }
+.boya-settle-bar-fill { height: 100%; }
+.boya-settle-bar-fill--mountain { background: linear-gradient(90deg, #6b4a2b, #8c6a4f); }
+.boya-settle-bar-fill--pluck { background: linear-gradient(90deg, #a23c31, #c46a4f); }
+.boya-settle-bar-fill--swift { background: linear-gradient(90deg, #cfad64, #e0c98a); }
+.boya-settle-bar-fill--solo { background: linear-gradient(90deg, #2f6f74, #4a9ea4); }
+.boya-settle-bar-fill--rest { background: linear-gradient(90deg, #9db8b6, #c8dcd8); }
+.boya-settle-receipt { margin: 18px 0 0; }
+.boya-settle-receipt div { background: rgba(74,46,30,.08); }
+.boya-settle-receipt code { color: #4a2e1e; }
+
+/* 右侧 · 专属曲目播放器 */
+.boya-settle-track { display: flex; flex-direction: column; padding: clamp(20px, 2.4vw, 30px); border: 1px solid rgba(207,173,100,.55); border-radius: 24px 6px 24px 6px; background: linear-gradient(180deg, rgba(16,44,48,.82), rgba(8,28,32,.86)); backdrop-filter: blur(8px); box-shadow: 0 24px 70px rgba(0,0,0,.4); color: #fff5df; }
+.boya-settle-track-kicker { margin: 0 0 8px; color: #cfad64; font: 800 .76rem/1 system-ui, sans-serif; letter-spacing: .2em; }
+.boya-settle-track h3 { margin: 0 0 4px; font-size: clamp(1.6rem, 2.6vw, 2.4rem); line-height: 1.15; color: #fff8e8; font-family: 'Songti SC', serif; }
+.boya-settle-track-sub { margin: 0 0 20px; color: rgba(255,245,223,.6); font: .82rem/1.5 system-ui, sans-serif; }
+.boya-track-player { display: flex; align-items: center; gap: 13px; padding: 15px 16px; border: 1px solid rgba(207,173,100,.4); border-radius: 16px 4px 16px 4px; background: rgba(0,0,0,.24); }
+.boya-track-play { display: grid; place-items: center; width: 52px; height: 52px; flex: 0 0 auto; border: 2px solid rgba(207,173,100,.7); border-radius: 50%; color: #fff8e8; background: radial-gradient(circle at 34% 30%, #a23c31, #6e2419); cursor: pointer; font-size: 1.15rem; transition: transform 140ms ease, box-shadow 140ms ease; }
+.boya-track-play:hover { transform: scale(1.06); box-shadow: 0 0 24px rgba(162,60,49,.5); }
+.boya-track-play:disabled { opacity: .6; cursor: wait; transform: none; }
+.boya-track-play:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.boya-track-progress { flex: 1; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.14); }
+.boya-track-progress i { display: block; width: 0; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #cfad64, #f0dca2); transition: width .12s linear; }
+.boya-track-time { flex: 0 0 auto; min-width: 46px; text-align: right; color: #e9ddc4; font: 700 .8rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.boya-settle-track-quote { margin: 18px 0 0; color: rgba(255,245,223,.72); font: .92rem/1.75 'Songti SC', serif; }
+.boya-track-actions { display: grid; gap: 10px; margin-top: auto; padding-top: 20px; }
+.boya-track-actions .primary-button { width: 100%; padding: 15px; }
+.boya-settle-track-status { min-height: 1.4em; margin: 10px 0 0; color: #cfad64; font: 700 .78rem/1.4 system-ui, sans-serif; }
+
+/* 结算页底部：留言 + 链上封存 */
+.boya-settle-foot { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.6fr) auto; gap: clamp(18px, 2.6vw, 36px); width: min(1240px, 100%); margin: clamp(20px, 3vh, 36px) auto 0; padding: clamp(14px, 2vw, 22px); border: 1px solid rgba(207,173,100,.3); border-radius: 20px 6px 20px 6px; background: rgba(6,22,26,.55); backdrop-filter: blur(8px); align-items: start; }
+.boya-settle-foot-note textarea { width: 100%; margin-top: 8px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.55); border-radius: 10px; color: #fff5df; background: rgba(0,0,0,.18); font: 1rem/1.5 system-ui, sans-serif; resize: vertical; }
+.boya-settle-foot-actions { display: flex; flex-direction: column; gap: 12px; padding-top: 6px; }
+
+/* 链上独立核验页 */
+.verify-screen { position: fixed; z-index: 45; inset: 0; overflow: hidden auto; color: #fff5df; background: radial-gradient(circle at 68% 20%, #1c565c, transparent 38%), #0a2226; }
+.verify-shell { width: min(920px, 92vw); margin: 0 auto; padding: clamp(34px, 7vh, 84px) 0 60px; }
+.verify-header h1 { margin: 0 0 12px; font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.verify-header p:last-child { color: rgba(255,245,223,.76); font: 1rem/1.7 system-ui, sans-serif; }
+.verify-form { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; margin: 30px 0 22px; }
+.verify-form label { grid-column: 1 / -1; color: rgba(255,245,223,.62); font: 600 .78rem/1.2 system-ui, sans-serif; }
+.verify-form .title-input { padding: 13px 15px; color: #fff; background: rgba(0,0,0,.24); border-color: rgba(255,255,255,.42); }
+.verify-form .primary-button { padding: 14px 24px; white-space: nowrap; }
+.verify-result { display: grid; gap: 13px; min-height: 80px; }
+.verify-note { margin: 0; padding: 13px 16px; border-radius: 12px 3px 12px 3px; font: .95rem/1.65 system-ui, sans-serif; }
+.verify-note--pending { color: #ffe6b8; background: rgba(207,173,100,.16); }
+.verify-note--ok { color: #b6f0d3; background: rgba(94,217,158,.15); }
+.verify-note--warning { color: #ffe0b0; background: rgba(219,177,92,.16); }
+.verify-note--error { color: #ffcdc4; background: rgba(231,144,122,.16); }
+.verify-note--note { color: rgba(255,245,223,.72); background: rgba(255,255,255,.07); }
+.verify-table { display: grid; gap: 7px; margin: 0; }
+.verify-table div { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 12px; padding: 10px 13px; border-radius: 10px; background: rgba(255,255,255,.06); }
+.verify-table dt { color: rgba(255,245,223,.55); font: 600 .76rem/1.45 system-ui, sans-serif; }
+.verify-table dd { margin: 0; overflow-wrap: anywhere; color: #fff8e8; font: .8rem/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.verify-back { margin-top: 26px; color: #9be8e4; }
+
+@media (max-width: 1180px) {
+  .boya-settle-stage { grid-template-columns: 1fr; }
+  .boya-settle-foot { grid-template-columns: 1fr; }
+  .boya-settle-foot-actions { flex-direction: row; flex-wrap: wrap; }
+}
+@media (max-width: 1080px) {
+  .boya-qin-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+  .boya-opening-dialogue { right: 12px; bottom: 12px; max-width: 78vw; }
+  .boya-opening-start { left: 34%; width: 32%; }
+  .boya-map-destination { left: 12%; top: 62%; }
+  .boya-map-route { display: none; }
+  .boya-map-boat { left: 56%; top: 56%; width: 44vw; }
+  .boya-preview-row { flex-wrap: wrap; }
+  .boya-hint { bottom: 84px; font-size: .78rem; white-space: normal; text-align: center; }
+  .boya-hotspot--lake { left: 46%; top: 52%; }
+  .boya-hotspot--qintai { left: 52%; top: 34%; }
+  .boya-lake-screen .explore-hud, .boya-qintai-screen .explore-hud { flex-direction: column; align-items: stretch; gap: 12px; padding: 62px 16px 18px; }
+  .boya-lake-screen .explore-hud > div:first-child, .boya-qintai-screen .explore-hud > div:first-child { max-width: 100%; min-width: 0; }
+  .boya-lake-screen .explore-hud h2, .boya-qintai-screen .explore-hud h2 { font-size: 1.32rem; line-height: 1.3; letter-spacing: -.01em; }
+  .boya-lake-screen .explore-hud h2, .boya-qintai-screen .explore-hud h2 { color: #fff8e8; text-shadow: 0 2px 14px rgba(0,0,0,.92), 0 0 30px rgba(0,0,0,.6); }
+  .boya-lake-screen .eyebrow, .boya-qintai-screen .eyebrow { font-size: .7rem; letter-spacing: .2em; }
+  .boya-lake-screen .ink-progress, .boya-qintai-screen .ink-progress { justify-self: start; padding: 8px 12px; }
+  .boya-lake-screen .anchor-nav, .boya-qintai-screen .anchor-nav { top: auto; bottom: 22px; left: 16px; }
+  .boya-qin-screen::before { inset: 8px; }
+  .boya-string-keys { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .boya-theme-choice { grid-template-columns: 1fr; }
+  .boya-qin-panel { padding: 16px; }
+  .verify-form { grid-template-columns: 1fr; }
+  .verify-table div { grid-template-columns: 1fr; gap: 4px; }
+}

@@ -21,6 +21,17 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     expectedPackageHash: "0x633d8480babc919399ece09ff63a6a7f79b2dfdc3ff40338dd9bfda5e0fd3399",
     expectedIssuer: "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
   }),
+  // 伯牙与钟子期人格包：packageId 由 packageKey 按 keccak256 推导（与李白篇同一规则）。
+  // 该人格包尚未在主网登记，因此 signature 留空；前端会在封存前如实核验 packageExists，
+  // 未登记时直接停止并说明原因，不会模拟成功。
+  personaBoya: Object.freeze({
+    packageKey: "jiangcheng-guren:persona:bo-ya-zhong-zi-qi",
+    packageId: "0xce4857d236ed8b328dec07c0229349f00228f4e5a9effb843b38f60c535ae085",
+    version: 1,
+    packageHash: "",
+    issuer: "",
+    registeredOnMainnet: false,
+  }),
   registryAbi: Object.freeze([
     "function owner() view returns (address)",
     "function authorizedIssuers(address) view returns (bool)",
