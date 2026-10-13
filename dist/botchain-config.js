@@ -21,26 +21,29 @@ window.BOTCHAIN_CONFIG = Object.freeze({
     expectedPackageHash: "0x633d8480babc919399ece09ff63a6a7f79b2dfdc3ff40338dd9bfda5e0fd3399",
     expectedIssuer: "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
   }),
-  // 伯牙与钟子期人格包：packageId 由 packageKey 按 keccak256 推导（与李白篇同一规则）。
-  // 该人格包尚未在主网登记，因此 signature 留空；前端会在封存前如实核验 packageExists，
-  // 未登记时直接停止并说明原因，不会模拟成功。
+  // 伯牙与钟子期路线使用已冻结、通过本地哈希校验并已在主网登记的
+  // “高山流水”人格包 manifest。前端仍会在每次写入前回读 packageExists
+  // 与 getPackage，不能仅凭这份静态配置宣称来源有效。
   personaBoya: Object.freeze({
-    packageKey: "jiangcheng-guren:persona:bo-ya-zhong-zi-qi",
-    packageId: "0xce4857d236ed8b328dec07c0229349f00228f4e5a9effb843b38f60c535ae085",
+    packageKey: "jiangcheng-guren:persona:gaoshan-liushui",
+    packageId: "0x0e8dea51bcb23e35f71f640b17d49d39a896f8d83e592482a2e70bdf5c35053c",
     version: 1,
-    packageHash: "",
-    issuer: "",
-    registeredOnMainnet: false,
+    packageHash: "0x546b02b865dec800c12e0bc793c44ed70983b50601c1d6b3366a5ef195215648",
+    expectedPackageHash: "0x546b02b865dec800c12e0bc793c44ed70983b50601c1d6b3366a5ef195215648",
+    issuer: "0x3963Dd43d4D86749F535c562Ee5a14E723323f66",
+    registeredOnMainnet: true,
+    registrationTxHash: "0xcca61f431e18126f70c90e684ce8c617258e8586d75cef994a479e367cd2967f",
+    registrationBlock: 25866913,
   }),
   // 用户共创合约：与上方“项目授权签发”合约分离。
   // 这里的写入者是普通参与者钱包，不需要 owner / issuer 权限；但每个根作品
   // 必须引用上方 JourneyMemoryRegistry 已登记的人格包版本，形成可回查的来源谱系。
-  // 主网部署完成前保持空地址；前端会明确停用交易，不模拟成功。
+  // 主网地址、部署交易和 runtime hash 均已通过 RPC 回读核验。
   coCreationRegistry: Object.freeze({
-    address: "",
-    expectedRuntimeHash: "",
-    deploymentBlock: null,
-    deploymentTxHash: "",
+    address: "0xac364Ef166138B225a00F257B4A66F87999453E1",
+    expectedRuntimeHash: "0x52307ac0085b8b14ba4ffcaf76559bbdfb2d187602be153a849b731d30850676",
+    deploymentBlock: 26558421,
+    deploymentTxHash: "0x180005cdd0592064e9db5cd648d4ac9afb5b89c3613ca091315d17a34a29b719",
     abi: Object.freeze([
       "function sourceRegistry() view returns (address)",
       "function workExists(bytes32 workId) view returns (bool)",
