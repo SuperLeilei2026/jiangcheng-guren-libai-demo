@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#102f35" />
     <meta
       name="description"
-      content="江城故人李白线互动游戏 Demo，乘御笔游黄鹤楼，与诗仙共题一首新诗。"
+      content="江城故人互动叙事 Demo：与李白同游黄鹤楼题诗，或随伯牙子期泛舟琴台共谱知音曲。"
     />
     <link
       rel="icon"
@@ -14,7 +14,7 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='14' width='64' height='64' fill='%23102f35'/%3E%3Cpath d='M10 43c14-2 21-18 42-25-9 9-13 17-12 25-9-5-18-4-30 0Z' fill='%23e8d8ae'/%3E%3Ccircle cx='45' cy='19' r='4' fill='%23b44636'/%3E%3C/svg%3E"
     />
     <link rel="stylesheet" href="./styles.css" />
-    <title>江城故人 · 李白篇</title>
+    <title>江城故人 · 李白与伯牙子期</title>
   </head>
   <body>
     <audio data-bg-music loop preload="metadata" aria-label="游戏背景音乐">
@@ -41,7 +41,7 @@
         <header class="screen-header">
           <p class="eyebrow">第一章 · 择一故人</p>
           <h2 id="select-title">谁与你同游江城？</h2>
-          <p>李白与伯牙子期两条路线已开放，屈原、张之洞将在后续篇章中抵达。</p>
+          <p>李白与伯牙子期两条路线均已开放。</p>
         </header>
         <div class="character-grid" role="group" aria-label="选择同行人物">
           <button class="character-card character-card--selectable" type="button" data-character="libai" aria-pressed="false">
@@ -51,14 +51,6 @@
           <button class="character-card character-card--selectable" type="button" data-character="boya_ziqi" aria-pressed="false">
             <img src="./assets/boya-ziqi-card.png" alt="" decoding="async" />
             <span class="card-caption"><span>伯牙与钟子期 <small>古琴台 · 琴舟</small></span><strong data-boya-card-state>可体验</strong></span>
-          </button>
-          <button class="character-card character-card--selectable" type="button" data-character="quyuan" aria-pressed="false">
-            <img src="./assets/quyuan-card-v2.png" alt="" decoding="async" />
-            <span class="card-caption"><span>屈原 <small>江滩楚风 · 龙舟</small></span><strong>筹备中</strong></span>
-          </button>
-          <button class="character-card character-card--selectable" type="button" data-character="zhangzhidong" aria-pressed="false">
-            <img src="./assets/zhangzhidong-card.png" alt="" decoding="async" />
-            <span class="card-caption"><span>张之洞 <small>汉阳工业 · 蒸汽火车</small></span><strong>筹备中</strong></span>
           </button>
         </div>
       </section>
