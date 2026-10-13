@@ -11,6 +11,7 @@
     3: "相逢",
     4: "远响",
   });
+  const listenedProviders = new WeakSet();
 
   const state = {
     selectedWallet: null,
@@ -251,8 +252,8 @@
     $("[data-wallet-address]").textContent = account;
     $("[data-action='connect-wallet']").textContent = `${selected.info?.name || "EVM 钱包"} · ${shortHex(account)}`;
 
-    if (!rawProvider.__jiangchengCoCreationListening && typeof rawProvider.on === "function") {
-      rawProvider.__jiangchengCoCreationListening = true;
+    if (!listenedProviders.has(rawProvider) && typeof rawProvider.on === "function") {
+      listenedProviders.add(rawProvider);
       rawProvider.on("accountsChanged", () => resetWallet("钱包账户已变更，请重新连接后再签名。"));
       rawProvider.on("chainChanged", (chainId) => {
         if (Number.parseInt(chainId, 16) !== config.chainId) {
