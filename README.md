@@ -1,6 +1,6 @@
 # 江城故人 · 李白篇 / 伯牙子期篇 Demo
 
-一个使用项目现有角色卡与水墨场景素材制作的单页互动叙事 Demo。目前开放两条路线：**李白篇**（黄鹤楼诗旅）与**伯牙子期篇**（高山流水）；屈原、张之洞保留静态预览入口。
+一个使用项目现有角色卡与水墨场景素材制作的单页互动叙事 Demo。目前开放两条路线：**李白篇**（黄鹤楼诗旅）与**伯牙子期篇**（高山流水）；屈原、张之洞保留静态预览入口。两条已开放路线都接入独立的“链上共创谱系”页面，让普通参与者用自己的 EVM 钱包发布、回应和回读关系。
 
 ## 伯牙子期篇（高山流水）
 
@@ -47,6 +47,17 @@
 
 当前题诗仍是规则生成的演示内容，尚未接入真实模型服务。链上交互是真实主网交易，不模拟成功状态：只有交易成功、事件字段和合约回读全部一致后，页面才会显示“BOT Chain 主网已登记”。钱包拒绝、网络错误或权限不足均保留本地 PNG 下载。
 
+## 用户钱包的链上共创
+
+`dist/cocreation.html` 是面向 C 端用户的独立共创入口，通过 EIP-6963 发现 MetaMask、OKX Wallet 等 EVM 钱包，并引导切换到 BOT Chain Mainnet（Chain ID `677`）。它与原有的“项目 issuer 签发记忆”是两种不同产品语义：
+
+- **李白·诗句唱和**：钱包 A 发布上联，获得带 `workId` 的邀请链接；钱包 B 回读上联后提交下联。合约以 `parentId` 固化两件作品的父子关系，并禁止同一钱包自问自答。
+- **伯牙子期·知音评价**：钱包 A 发布音乐配方的 Keccak-256 指纹；钱包 B 通过邀请链接获取配方，前端对比指纹后才允许试听和提交“意境 + 三项评分 + 短评”。钱包 A 可追加一次“认定知音”交易。
+
+共创合约是 **permissionless-user-writes**：没有 owner 或 issuer 白名单，但会在合约层校验异钱包回应、作品类型、评分范围和认定权属。诗句、曲名与短评是公开合约数据；音乐配方仅上链 Hash。下联和知音评价都由合约索引并通过 getter 回读，不依赖 `eth_getLogs`。链上记录只证明钱包行为与时序，不自动证明现实身份、原创权属或评价质量。
+
+Solidity 源码与边界说明见 [`contracts/JiangchengCoCreationRegistry.sol`](./contracts/JiangchengCoCreationRegistry.sol) 和 [`contracts/README.md`](./contracts/README.md)。**当前代码阶段不写假地址或假交易**：共创合约主网部署完成前，`coCreationRegistry.address` 保持为空，页面会明确显示等待部署并禁止发起交易。
+
 ## BOT Chain Mainnet 核验材料
 
 | 项目 | 可核验材料 |
@@ -79,9 +90,14 @@ python3 -m http.server 4173 --directory dist
 - `dist/index.html`：游戏画面与交互结构
 - `dist/styles.css`：水墨国风界面、动效和响应式布局
 - `dist/game.js`：剧情状态、题诗、记忆卡下载与钱包/合约状态机
+- `dist/boya.js`：伯牙子期篇独立状态机、五弦音律、配方与主网封存
+- `dist/cocreation.html` / `dist/cocreation.js`：诗句唱和、曲目发布、知音评价与认定的用户钱包页面
+- `dist/wallet-provider.js`：EIP-6963 钱包发现与 MetaMask / OKX Wallet 选择器
 - `dist/botchain-config.js`：BOT Chain 主网、应用合约、人格包和最小 ABI 配置
 - `dist/mainnet-evidence.json`：部署、人格包登记及实时回读的机器可读证据
 - `dist/vendor/ethers.umd.min.js`：随站点部署的 ethers v6 浏览器运行时，避免依赖第三方 CDN
 - `dist/assets/`：部署用美术资源副本
+- `contracts/JiangchengCoCreationRegistry.sol`：无白名单的用户共创谱系合约源码
 
-前端不会保存私钥，也不会把私钥放进配置或仓库。普通访问者钱包没有合约 issuer 权限时只能下载本地卡片；主网演示签发须使用项目 owner 或已授权 issuer 钱包。后续接入真实 AI 或会话记忆时，可以保留现有前端状态机，替换题诗生成逻辑。PRD 中仍保留若干旧版“三锚点”措辞；本 Demo 以玉笛、黄鹤两节点规则为准。
+前端不会保存私钥，也不会把私钥放进配置或仓库。“项目记忆签发”仍须使用 owner 或已授权 issuer 钱包；“用户链上共创”则不要求 issuer 权限，任何参与者都用自己的钱包签名并承担少量 BOT 交易费。后续接入真实 AI 或会话记忆时，可以保留现有前端状态机，替换题诗生成逻辑。PRD 中仍保留若干旧版“三锚点”措辞；本 Demo 以玉笛、黄鹤两节点规则为准。
+
